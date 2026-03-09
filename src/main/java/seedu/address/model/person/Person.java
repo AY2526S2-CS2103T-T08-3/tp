@@ -114,7 +114,7 @@ public class Person {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, orderDescription, tags);
+        return Objects.hash(name, phone, email, address, orderDescription, expiryDate, tags);
     }
 
     @Override
@@ -126,6 +126,7 @@ public class Person {
                 .add("address", address)
                 .add("tags", tags)
                 .add("orderDescription", orderDescription)
+                .add("expiry_date", expiryDate)
                 .toString();
     }
 

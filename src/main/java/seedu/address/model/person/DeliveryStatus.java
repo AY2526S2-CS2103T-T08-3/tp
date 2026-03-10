@@ -50,7 +50,7 @@ public class DeliveryStatus {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof Name)) {
+        if (!(other instanceof DeliveryStatus)) {
             return false;
         }
 

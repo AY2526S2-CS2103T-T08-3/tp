@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_BOX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DELIVERY_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
@@ -24,10 +25,10 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Box;
 import seedu.address.model.person.DeliveryStatus;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
-import seedu.address.model.person.Box;
 import seedu.address.model.person.OrderDescription;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
@@ -48,6 +49,7 @@ public class EditCommand extends Command {
             + "[" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_EMAIL + "EMAIL] "
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
+            + "[" + PREFIX_BOX + "BOX] "
             + "[" + PREFIX_ORDER_DESCRIPTION + "ORDER_DESCRIPTION] "
             + "[" + PREFIX_DELIVERY_STATUS + "DELIVERY STATUS] "
             + "[" + PREFIX_TAG + "TAG]...\n"

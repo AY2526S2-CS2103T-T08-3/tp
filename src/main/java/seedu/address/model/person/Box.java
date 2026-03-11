@@ -13,6 +13,11 @@ public class Box {
 
     public final String boxName;
 
+    /**
+     * Constructs a {@code Box}.
+     *
+     * @param boxName A valid box name.
+     */
     public Box(String boxName) {
         requireNonNull(boxName);
         checkArgument(isValidBoxName(boxName), MESSAGE_CONTRAINTS);

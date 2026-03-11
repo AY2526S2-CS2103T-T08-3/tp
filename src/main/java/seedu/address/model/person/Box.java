@@ -4,22 +4,22 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.AppUtil.checkArgument;
 
 /**
- * Represents a Package in Client2Door
+ * Represents a Box in Client2Door
  */
-public class Package {
+public class Box {
 
-    public static final String MESSAGE_CONTRAINTS = "Package names should be alphanumeric";
+    public static final String MESSAGE_CONTRAINTS = "Box names should be alphanumeric";
     public static final String VALIDATION_REGEX = "\\p{Alnum}";
 
-    public final String packageName;
+    public final String boxName;
 
-    public Package(String packageName) {
-        requireNonNull(packageName);
-        checkArgument(isValidPackageName(packageName), MESSAGE_CONTRAINTS);
-        this.packageName = packageName;
+    public Box(String boxName) {
+        requireNonNull(boxName);
+        checkArgument(isValidBoxName(boxName), MESSAGE_CONTRAINTS);
+        this.boxName = boxName;
     }
 
-    public static boolean isValidPackageName(String test) {
+    public static boolean isValidBoxName(String test) {
         return test.matches(VALIDATION_REGEX);
     }
 
@@ -30,17 +30,17 @@ public class Package {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof Package)) {
+        if (!(other instanceof Box)) {
             return false;
         }
 
-        Package otherPackage = (Package) other;
-        return packageName.equals(otherPackage.packageName);
+        Box otherBox = (Box) other;
+        return boxName.equals(otherBox.boxName);
     }
 
     @Override
     public int hashCode() {
-        return packageName.hashCode();
+        return boxName.hashCode();
     }
 
     /**
@@ -49,7 +49,7 @@ public class Package {
      */
     @Override
     public String toString() {
-        return '[' + packageName + ']';
+        return '[' + boxName + ']';
     }
 
 }

@@ -8,6 +8,7 @@ import static seedu.address.logic.commands.CommandTestUtil.DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_DELIVERY_STATUS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_EXPIRY_DATE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ORDER_DESCRIPTION_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_PHONE_BOB;
@@ -54,6 +55,10 @@ public class EditPersonDescriptorTest {
         editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withAddress(VALID_ADDRESS_BOB).build();
         assertFalse(DESC_AMY.equals(editedAmy));
 
+        // different expiry date -> returns false
+        editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withExpiryDate(VALID_EXPIRY_DATE_BOB).build();
+        assertFalse(DESC_AMY.equals(editedAmy));
+
         // different order description -> returns false
         editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withOrderDescription(VALID_ORDER_DESCRIPTION_BOB).build();
         assertFalse(DESC_AMY.equals(editedAmy));
@@ -76,6 +81,7 @@ public class EditPersonDescriptorTest {
                 + editPersonDescriptor.getEmail().orElse(null) + ", address="
                 + editPersonDescriptor.getAddress().orElse(null) + ", boxes="
                 + editPersonDescriptor.getBoxes().orElse(null) + ", orderDescription="
+                + editPersonDescriptor.getExpiryDate().orElse(null) + ", expiryDate="
                 + editPersonDescriptor.getOrderDescription().orElse(null) + ", deliveryStatus="
                 + editPersonDescriptor.getDeliveryStatus().orElse(null) + ", tags="
                 + editPersonDescriptor.getTags().orElse(null) + "}";

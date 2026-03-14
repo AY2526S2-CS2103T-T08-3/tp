@@ -45,6 +45,8 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private FlowPane tags;
     @FXML
+    private Label expiryDate;
+    @FXML
     private FlowPane boxes;
 
     /**
@@ -63,6 +65,7 @@ public class PersonCard extends UiPart<Region> {
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
+        expiryDate.setText("Subscription end date: " + person.getExpiryDate().value);
         person.getBoxes().stream()
                 .sorted(Comparator.comparing(box -> box.boxName))
                 .forEach(box -> boxes.getChildren().add(new Label(box.boxName)));

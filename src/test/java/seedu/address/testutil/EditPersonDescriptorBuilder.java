@@ -9,12 +9,12 @@ import seedu.address.model.person.Address;
 import seedu.address.model.person.Box;
 import seedu.address.model.person.DeliveryStatus;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.ExpiryDate;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.OrderDescription;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.tag.Tag;
-
 /**
  * A utility class to help with building EditPersonDescriptor objects.
  */
@@ -42,7 +42,9 @@ public class EditPersonDescriptorBuilder {
         descriptor.setOrderDescription(person.getOrderDescription());
         descriptor.setDeliveryStatus(person.getDeliveryStatus());
         descriptor.setTags(person.getTags());
+        descriptor.setExpiryDate(person.getExpiryDate());
         descriptor.setBoxes(person.getBoxes());
+
     }
 
     /**
@@ -74,6 +76,14 @@ public class EditPersonDescriptorBuilder {
      */
     public EditPersonDescriptorBuilder withAddress(String address) {
         descriptor.setAddress(new Address(address));
+        return this;
+    }
+
+    /**
+     * Sets the {@code ExpiryDate} of the {@code EditPersonDescriptor} that we are building.
+     */
+    public EditPersonDescriptorBuilder withExpiryDate(String expiryDate) {
+        descriptor.setExpiryDate(new ExpiryDate(expiryDate));
         return this;
     }
 

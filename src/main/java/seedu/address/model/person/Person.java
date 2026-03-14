@@ -26,20 +26,24 @@ public class Person {
     // Data fields
     private final Address address;
     private final Set<Tag> tags = new HashSet<>();
+    private final ExpiryDate expiryDate;
     private final Set<Box> boxes = new HashSet<>();
 
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address,
-                  Set<Box> boxes, OrderDescription orderDescription, DeliveryStatus deliveryStatus, Set<Tag> tags) {
+    public Person(Name name, Phone phone, Email email, Address address, Set<Box> boxes,
+                  OrderDescription orderDescription, ExpiryDate expiryDate,
+                  DeliveryStatus deliveryStatus, Set<Tag> tags) {
         requireAllNonNull(name, phone, email, address, orderDescription, deliveryStatus, tags);
+
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.boxes.addAll(boxes);
         this.orderDescription = orderDescription;
+        this.expiryDate = expiryDate;
         this.deliveryStatus = deliveryStatus;
         this.tags.addAll(tags);
     }
@@ -70,6 +74,10 @@ public class Person {
 
     public OrderDescription getOrderDescription() {
         return orderDescription;
+    }
+
+    public ExpiryDate getExpiryDate() {
+        return expiryDate;
     }
 
     public DeliveryStatus getDeliveryStatus() {
@@ -119,6 +127,7 @@ public class Person {
                 && address.equals(otherPerson.address)
                 && boxes.equals(otherPerson.boxes)
                 && orderDescription.equals(otherPerson.orderDescription)
+                && expiryDate.equals(otherPerson.expiryDate)
                 && deliveryStatus.equals(otherPerson.deliveryStatus)
                 && tags.equals(otherPerson.tags);
     }
@@ -126,7 +135,7 @@ public class Person {
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, boxes, orderDescription, deliveryStatus, tags);
+        return Objects.hash(name, phone, email, address, boxes, orderDescription, expiryDate, deliveryStatus, tags);
     }
 
     @Override
@@ -138,6 +147,7 @@ public class Person {
                 .add("address", address)
                 .add("boxes", boxes)
                 .add("orderDescription", orderDescription)
+                .add("expiryDate", expiryDate)
                 .add("deliveryStatus", deliveryStatus)
                 .add("tags", tags)
                 .toString();

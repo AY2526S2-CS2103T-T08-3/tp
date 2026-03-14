@@ -9,10 +9,13 @@ import static seedu.address.logic.commands.CommandTestUtil.DELIVERY_STATUS_DESC_
 import static seedu.address.logic.commands.CommandTestUtil.DELIVERY_STATUS_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.EXPIRY_DATE_DESC_AMY;
+import static seedu.address.logic.commands.CommandTestUtil.EXPIRY_DATE_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_ADDRESS_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_BOX_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_DELIVERY_STATUS_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_EMAIL_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_EXPIRY_DATE_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_ORDER_DESCRIPTION_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_PHONE_DESC;
@@ -32,6 +35,7 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_BOX_BOX1;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_BOX_BOX2;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_DELIVERY_STATUS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_EXPIRY_DATE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ORDER_DESCRIPTION_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ORDER_DESCRIPTION_BOB;
@@ -41,6 +45,7 @@ import static seedu.address.logic.commands.CommandTestUtil.VALID_TAG_HUSBAND;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DELIVERY_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EXPIRY_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ORDER_DESCRIPTION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
@@ -57,6 +62,7 @@ import seedu.address.model.person.Address;
 import seedu.address.model.person.Box;
 import seedu.address.model.person.DeliveryStatus;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.ExpiryDate;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.OrderDescription;
 import seedu.address.model.person.Person;
@@ -69,35 +75,39 @@ public class AddCommandParserTest {
 
     @Test
     public void parse_allFieldsPresent_success() {
-        Person expectedPerson = new PersonBuilder(BOB).withOrderDescription(VALID_ORDER_DESCRIPTION_BOB)
+
+        Person expectedPerson = new PersonBuilder(BOB)
+                .withOrderDescription(VALID_ORDER_DESCRIPTION_BOB)
+                .withExpiryDate(VALID_EXPIRY_DATE_BOB)
                 .withDeliveryStatus(VALID_DELIVERY_STATUS_BOB)
                 .withTags(VALID_TAG_FRIEND)
                 .withBoxes(VALID_BOX_BOX1).build();
 
         // whitespace only preamble
         assertParseSuccess(parser, PREAMBLE_WHITESPACE + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                + ADDRESS_DESC_BOB + ORDER_DESCRIPTION_DESC_BOB + DELIVERY_STATUS_DESC_BOB + TAG_DESC_FRIEND
-                + BOX_DESC_BOX1,
+                + ADDRESS_DESC_BOB + ORDER_DESCRIPTION_DESC_BOB + EXPIRY_DATE_DESC_BOB + DELIVERY_STATUS_DESC_BOB
+                + TAG_DESC_FRIEND + BOX_DESC_BOX1,
                 new AddCommand(expectedPerson));
-
 
         // multiple tags - all accepted
         Person expectedPersonMultipleTags = new PersonBuilder(BOB)
                 .withOrderDescription(VALID_ORDER_DESCRIPTION_BOB)
+                .withExpiryDate(VALID_EXPIRY_DATE_BOB)
                 .withDeliveryStatus(VALID_DELIVERY_STATUS_BOB)
                 .withTags(VALID_TAG_FRIEND, VALID_TAG_HUSBAND)
                 .withBoxes(VALID_BOX_BOX1, VALID_BOX_BOX2).build();
         assertParseSuccess(parser,
                 NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB + ORDER_DESCRIPTION_DESC_BOB
-                        + DELIVERY_STATUS_DESC_BOB + TAG_DESC_FRIEND + TAG_DESC_HUSBAND + BOX_DESC_BOX1 + BOX_DESC_BOX2,
+                        + EXPIRY_DATE_DESC_BOB + DELIVERY_STATUS_DESC_BOB + TAG_DESC_FRIEND + TAG_DESC_HUSBAND
+                        + BOX_DESC_BOX1 + BOX_DESC_BOX2,
                 new AddCommand(expectedPersonMultipleTags));
     }
 
     @Test
     public void parse_repeatedNonTagValue_failure() {
         String validExpectedPersonString = NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                + ADDRESS_DESC_BOB + BOX_DESC_BOX1 + ORDER_DESCRIPTION_DESC_BOB + DELIVERY_STATUS_DESC_BOB
-                + TAG_DESC_FRIEND;
+                + ADDRESS_DESC_BOB + BOX_DESC_BOX1 + ORDER_DESCRIPTION_DESC_BOB + EXPIRY_DATE_DESC_BOB
+                + DELIVERY_STATUS_DESC_BOB + TAG_DESC_FRIEND;
 
         // multiple names
         assertParseFailure(parser, NAME_DESC_AMY + validExpectedPersonString,
@@ -115,14 +125,19 @@ public class AddCommandParserTest {
         assertParseFailure(parser, ADDRESS_DESC_AMY + validExpectedPersonString,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_ADDRESS));
 
+        // multiple expiry dates
+        assertParseFailure(parser, EXPIRY_DATE_DESC_AMY + validExpectedPersonString,
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_EXPIRY_DATE));
+
         // multiple fields repeated
         assertParseFailure(parser,
                 validExpectedPersonString + PHONE_DESC_AMY + EMAIL_DESC_AMY + NAME_DESC_AMY + ADDRESS_DESC_AMY
                         + ORDER_DESCRIPTION_DESC_AMY
+                        + EXPIRY_DATE_DESC_AMY
                         + DELIVERY_STATUS_DESC_AMY
                         + validExpectedPersonString,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NAME, PREFIX_ADDRESS, PREFIX_EMAIL, PREFIX_PHONE,
-                        PREFIX_ORDER_DESCRIPTION, PREFIX_DELIVERY_STATUS));
+                        PREFIX_ORDER_DESCRIPTION, PREFIX_EXPIRY_DATE, PREFIX_DELIVERY_STATUS));
 
         // multiple delivery status
         assertParseFailure(parser, DELIVERY_STATUS_DESC_AMY + validExpectedPersonString,
@@ -150,6 +165,10 @@ public class AddCommandParserTest {
         assertParseFailure(parser, INVALID_ORDER_DESCRIPTION_DESC + validExpectedPersonString,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_ORDER_DESCRIPTION));
 
+        // invalid expiry date
+        assertParseFailure(parser, INVALID_EXPIRY_DATE_DESC + validExpectedPersonString,
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_EXPIRY_DATE));
+
         // valid value followed by invalid value
 
         // invalid name
@@ -172,19 +191,27 @@ public class AddCommandParserTest {
         assertParseFailure(parser, validExpectedPersonString + INVALID_ORDER_DESCRIPTION_DESC,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_ORDER_DESCRIPTION));
 
+        // invalid expiry date
+        assertParseFailure(parser, validExpectedPersonString + INVALID_EXPIRY_DATE_DESC,
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_EXPIRY_DATE));
+
         // invalid delivery status
         assertParseFailure(parser, validExpectedPersonString + INVALID_DELIVERY_STATUS_DESC,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_DELIVERY_STATUS));
+
     }
 
     @Test
     public void parse_optionalFieldsMissing_success() {
         // zero tags
-        Person expectedPerson = new PersonBuilder(AMY).withOrderDescription(VALID_ORDER_DESCRIPTION_AMY).withTags()
+
+        Person expectedPerson = new PersonBuilder(AMY)
+                .withOrderDescription(VALID_ORDER_DESCRIPTION_AMY)
+                .withTags()
                 .withBoxes(VALID_BOX_BOX1)
                 .build();
         assertParseSuccess(parser, NAME_DESC_AMY + PHONE_DESC_AMY + EMAIL_DESC_AMY + ADDRESS_DESC_AMY
-                        + BOX_DESC_BOX1 + ORDER_DESCRIPTION_DESC_AMY + DELIVERY_STATUS_DESC_AMY,
+                + BOX_DESC_BOX1 + ORDER_DESCRIPTION_DESC_AMY + EXPIRY_DATE_DESC_AMY + DELIVERY_STATUS_DESC_AMY,
                 new AddCommand(expectedPerson));
     }
 
@@ -193,24 +220,40 @@ public class AddCommandParserTest {
         String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE);
 
         // missing name prefix
-        assertParseFailure(parser, VALID_NAME_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB,
+        assertParseFailure(parser,
+                VALID_NAME_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
+                        + ORDER_DESCRIPTION_DESC_BOB + EXPIRY_DATE_DESC_BOB,
                 expectedMessage);
 
         // missing phone prefix
-        assertParseFailure(parser, NAME_DESC_BOB + VALID_PHONE_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB,
+        assertParseFailure(parser,
+                NAME_DESC_BOB + VALID_PHONE_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
+                        + ORDER_DESCRIPTION_DESC_BOB + EXPIRY_DATE_DESC_BOB,
                 expectedMessage);
 
         // missing email prefix
-        assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + VALID_EMAIL_BOB + ADDRESS_DESC_BOB,
+        assertParseFailure(parser,
+                NAME_DESC_BOB + PHONE_DESC_BOB + VALID_EMAIL_BOB + ADDRESS_DESC_BOB
+                        + ORDER_DESCRIPTION_DESC_BOB + EXPIRY_DATE_DESC_BOB,
                 expectedMessage);
 
         // missing address prefix
-        assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + VALID_ADDRESS_BOB,
+        assertParseFailure(parser,
+                NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + VALID_ADDRESS_BOB
+                        + ORDER_DESCRIPTION_DESC_BOB + EXPIRY_DATE_DESC_BOB,
                 expectedMessage);
 
         // missing order description prefix
-        assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
-                + VALID_ORDER_DESCRIPTION_BOB, expectedMessage);
+        assertParseFailure(parser,
+                NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
+                        + VALID_ORDER_DESCRIPTION_BOB + EXPIRY_DATE_DESC_BOB,
+                expectedMessage);
+
+        // missing expiry date prefix
+        assertParseFailure(parser,
+                NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
+                        + ORDER_DESCRIPTION_DESC_BOB,
+                expectedMessage);
 
         // missing delivery status prefix
         assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
@@ -218,66 +261,65 @@ public class AddCommandParserTest {
 
         // all prefixes missing
         assertParseFailure(parser, VALID_NAME_BOB + VALID_PHONE_BOB + VALID_EMAIL_BOB + VALID_ADDRESS_BOB
-                + VALID_ORDER_DESCRIPTION_BOB + VALID_DELIVERY_STATUS_BOB,
-                expectedMessage);
+                + VALID_ORDER_DESCRIPTION_BOB + VALID_EXPIRY_DATE_BOB + VALID_DELIVERY_STATUS_BOB, expectedMessage);
     }
 
     @Test
     public void parse_invalidValue_failure() {
         // invalid name
         assertParseFailure(parser, INVALID_NAME_DESC + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
-                + ORDER_DESCRIPTION_DESC_BOB + DELIVERY_STATUS_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND
-                + BOX_DESC_BOX1,
-                Name.MESSAGE_CONSTRAINTS);
+                + ORDER_DESCRIPTION_DESC_BOB + EXPIRY_DATE_DESC_BOB + DELIVERY_STATUS_DESC_BOB + TAG_DESC_HUSBAND
+                + TAG_DESC_FRIEND + BOX_DESC_BOX1, Name.MESSAGE_CONSTRAINTS);
 
         // invalid phone
         assertParseFailure(parser, NAME_DESC_BOB + INVALID_PHONE_DESC + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
-                + ORDER_DESCRIPTION_DESC_BOB + DELIVERY_STATUS_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND
-                + BOX_DESC_BOX1,
-                Phone.MESSAGE_CONSTRAINTS);
+                + ORDER_DESCRIPTION_DESC_BOB + EXPIRY_DATE_DESC_BOB + DELIVERY_STATUS_DESC_BOB + TAG_DESC_HUSBAND
+                + TAG_DESC_FRIEND + BOX_DESC_BOX1, Phone.MESSAGE_CONSTRAINTS);
 
         // invalid email
         assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + INVALID_EMAIL_DESC + ADDRESS_DESC_BOB
-                + ORDER_DESCRIPTION_DESC_BOB + DELIVERY_STATUS_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND
-                + BOX_DESC_BOX1,
-                Email.MESSAGE_CONSTRAINTS);
+                + ORDER_DESCRIPTION_DESC_BOB + EXPIRY_DATE_DESC_BOB + DELIVERY_STATUS_DESC_BOB + TAG_DESC_HUSBAND
+                + TAG_DESC_FRIEND + BOX_DESC_BOX1, Email.MESSAGE_CONSTRAINTS);
 
         // invalid address
         assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + INVALID_ADDRESS_DESC
-                + ORDER_DESCRIPTION_DESC_BOB + DELIVERY_STATUS_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND
-                + BOX_DESC_BOX1,
-                Address.MESSAGE_CONSTRAINTS);
+                + ORDER_DESCRIPTION_DESC_BOB + EXPIRY_DATE_DESC_BOB + DELIVERY_STATUS_DESC_BOB + TAG_DESC_HUSBAND
+                + TAG_DESC_FRIEND + BOX_DESC_BOX1, Address.MESSAGE_CONSTRAINTS);
 
         // invalid order description
         assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
-                + INVALID_ORDER_DESCRIPTION_DESC + DELIVERY_STATUS_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND
-                + BOX_DESC_BOX1,
-                OrderDescription.MESSAGE_CONSTRAINTS);
+                + INVALID_ORDER_DESCRIPTION_DESC + EXPIRY_DATE_DESC_BOB + DELIVERY_STATUS_DESC_BOB + TAG_DESC_HUSBAND
+                + TAG_DESC_FRIEND + BOX_DESC_BOX1, OrderDescription.MESSAGE_CONSTRAINTS);
+
+        // invalid expiry date
+        assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
+                + ORDER_DESCRIPTION_DESC_BOB + INVALID_EXPIRY_DATE_DESC + DELIVERY_STATUS_DESC_BOB + TAG_DESC_HUSBAND
+                + TAG_DESC_FRIEND + BOX_DESC_BOX1, ExpiryDate.MESSAGE_CONSTRAINTS);
 
         // invalid delivery status
         assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
-                + ORDER_DESCRIPTION_DESC_BOB + INVALID_DELIVERY_STATUS_DESC + TAG_DESC_HUSBAND
+                + ORDER_DESCRIPTION_DESC_BOB + EXPIRY_DATE_DESC_BOB + INVALID_DELIVERY_STATUS_DESC + TAG_DESC_HUSBAND
                 + TAG_DESC_FRIEND + BOX_DESC_BOX1, DeliveryStatus.MESSAGE_CONSTRAINTS);
 
         // invalid tag
         assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
-                + ORDER_DESCRIPTION_DESC_BOB + DELIVERY_STATUS_DESC_BOB
+                + ORDER_DESCRIPTION_DESC_BOB + EXPIRY_DATE_DESC_BOB + DELIVERY_STATUS_DESC_BOB
                 + INVALID_TAG_DESC + VALID_TAG_FRIEND + BOX_DESC_BOX1, Tag.MESSAGE_CONSTRAINTS);
 
         // invalid box
         assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB
-                + ORDER_DESCRIPTION_DESC_BOB + DELIVERY_STATUS_DESC_BOB
+                + ORDER_DESCRIPTION_DESC_BOB + EXPIRY_DATE_DESC_BOB + DELIVERY_STATUS_DESC_BOB
                 + INVALID_TAG_DESC + VALID_TAG_FRIEND + INVALID_BOX_DESC, Box.MESSAGE_CONSTRAINTS);
 
         // two invalid values, only first invalid value reported
         assertParseFailure(parser, INVALID_NAME_DESC + PHONE_DESC_BOB + EMAIL_DESC_BOB + INVALID_ADDRESS_DESC
-                        + ORDER_DESCRIPTION_DESC_BOB + DELIVERY_STATUS_DESC_BOB + BOX_DESC_BOX1,
-                Name.MESSAGE_CONSTRAINTS);
+                + ORDER_DESCRIPTION_DESC_BOB + EXPIRY_DATE_DESC_BOB + DELIVERY_STATUS_DESC_BOB
+                + BOX_DESC_BOX1, Name.MESSAGE_CONSTRAINTS);
 
         // non-empty preamble
         assertParseFailure(parser, PREAMBLE_NON_EMPTY + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
-                + ADDRESS_DESC_BOB + ORDER_DESCRIPTION_DESC_BOB + DELIVERY_STATUS_DESC_BOB + TAG_DESC_FRIEND
-                + BOX_DESC_BOX1,
+                + ADDRESS_DESC_BOB + ORDER_DESCRIPTION_DESC_BOB + EXPIRY_DATE_DESC_BOB + DELIVERY_STATUS_DESC_BOB
+                + TAG_DESC_FRIEND + BOX_DESC_BOX1,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
     }
 }

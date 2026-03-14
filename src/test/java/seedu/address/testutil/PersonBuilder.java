@@ -7,6 +7,7 @@ import seedu.address.model.person.Address;
 import seedu.address.model.person.Box;
 import seedu.address.model.person.DeliveryStatus;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.ExpiryDate;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.OrderDescription;
 import seedu.address.model.person.Person;
@@ -24,6 +25,7 @@ public class PersonBuilder {
     public static final String DEFAULT_EMAIL = "amy@gmail.com";
     public static final String DEFAULT_ADDRESS = "123, Jurong West Ave 6, #08-111";
     public static final String DEFAULT_ORDER_DESCRIPTION = "1 cake";
+    public static final String DEFAULT_EXPIRY_DATE = "2026-12-31";
     public static final String DEFAULT_DELIVERY_STATUS = "pending";
 
     private Name name;
@@ -31,6 +33,7 @@ public class PersonBuilder {
     private Email email;
     private Address address;
     private OrderDescription orderDescription;
+    private ExpiryDate expiryDate;
     private DeliveryStatus deliveryStatus;
     private Set<Tag> tags;
     private Set<Box> boxes;
@@ -44,6 +47,7 @@ public class PersonBuilder {
         email = new Email(DEFAULT_EMAIL);
         address = new Address(DEFAULT_ADDRESS);
         orderDescription = new OrderDescription(DEFAULT_ORDER_DESCRIPTION);
+        expiryDate = new ExpiryDate(DEFAULT_EXPIRY_DATE);
         deliveryStatus = new DeliveryStatus(DEFAULT_DELIVERY_STATUS);
         tags = new HashSet<>();
         boxes = SampleDataUtil.getBoxSet("Box1");
@@ -58,6 +62,7 @@ public class PersonBuilder {
         email = personToCopy.getEmail();
         address = personToCopy.getAddress();
         orderDescription = personToCopy.getOrderDescription();
+        expiryDate = personToCopy.getExpiryDate();
         deliveryStatus = personToCopy.getDeliveryStatus();
         tags = new HashSet<>(personToCopy.getTags());
         boxes = new HashSet<>(personToCopy.getBoxes());
@@ -120,6 +125,14 @@ public class PersonBuilder {
     }
 
     /**
+     * Sets the {@code ExpiryDate} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withExpiryDate(String expiryDate) {
+        this.expiryDate = new ExpiryDate(expiryDate);
+        return this;
+    }
+
+    /**
      * Sets the {@code DeliveryStatus} of the {@code Person} that we are building.
      */
     public PersonBuilder withDeliveryStatus(String deliveryStatus) {
@@ -128,7 +141,7 @@ public class PersonBuilder {
     }
 
     public Person build() {
-        return new Person(name, phone, email, address, boxes, orderDescription, deliveryStatus, tags);
+        return new Person(name, phone, email, address, boxes, orderDescription, expiryDate, deliveryStatus, tags);
     }
 
 }

@@ -5,6 +5,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_BOX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_DELIVERY_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EXPIRY_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ORDER_DESCRIPTION;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
@@ -28,11 +29,13 @@ import seedu.address.model.person.Address;
 import seedu.address.model.person.Box;
 import seedu.address.model.person.DeliveryStatus;
 import seedu.address.model.person.Email;
+import seedu.address.model.person.ExpiryDate;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.OrderDescription;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.tag.Tag;
+
 
 /**
  * Edits the details of an existing person in the address book.
@@ -51,6 +54,7 @@ public class EditCommand extends Command {
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
             + "[" + PREFIX_BOX + "BOX] "
             + "[" + PREFIX_ORDER_DESCRIPTION + "ORDER_DESCRIPTION] "
+            + "[" + PREFIX_EXPIRY_DATE + "EXPIRY_DATE] "
             + "[" + PREFIX_DELIVERY_STATUS + "DELIVERY STATUS] "
             + "[" + PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " 1 "
@@ -114,9 +118,10 @@ public class EditCommand extends Command {
         DeliveryStatus updatedDeliveryStatus = editPersonDescriptor.getDeliveryStatus()
                 .orElse(personToEdit.getDeliveryStatus());
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
-
+        ExpiryDate updatedExpiry = editPersonDescriptor.getExpiryDate().orElse(personToEdit.getExpiryDate());
         return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedBoxes,
-                updatedOrderDescription, updatedDeliveryStatus, updatedTags);
+                updatedOrderDescription, updatedExpiry, updatedDeliveryStatus, updatedTags);
+
     }
 
     @Override
@@ -154,6 +159,7 @@ public class EditCommand extends Command {
         private Address address;
         private Set<Box> boxes;
         private OrderDescription orderDescription;
+        private ExpiryDate expiryDate;
         private DeliveryStatus deliveryStatus;
         private Set<Tag> tags;
 
@@ -168,6 +174,7 @@ public class EditCommand extends Command {
             setPhone(toCopy.phone);
             setEmail(toCopy.email);
             setAddress(toCopy.address);
+            setExpiryDate(toCopy.expiryDate);
             setBoxes(toCopy.boxes);
             setOrderDescription(toCopy.orderDescription);
             setDeliveryStatus(toCopy.deliveryStatus);
@@ -212,6 +219,14 @@ public class EditCommand extends Command {
 
         public Optional<Address> getAddress() {
             return Optional.ofNullable(address);
+        }
+
+        public void setExpiryDate(ExpiryDate expiryDate) {
+            this.expiryDate = expiryDate;
+        }
+
+        public Optional<ExpiryDate> getExpiryDate() {
+            return Optional.ofNullable(expiryDate);
         }
 
         /**
@@ -280,6 +295,7 @@ public class EditCommand extends Command {
                     && Objects.equals(phone, otherEditPersonDescriptor.phone)
                     && Objects.equals(email, otherEditPersonDescriptor.email)
                     && Objects.equals(address, otherEditPersonDescriptor.address)
+                    && Objects.equals(expiryDate, otherEditPersonDescriptor.expiryDate)
                     && Objects.equals(boxes, otherEditPersonDescriptor.boxes)
                     && Objects.equals(orderDescription, otherEditPersonDescriptor.orderDescription)
                     && Objects.equals(deliveryStatus, otherEditPersonDescriptor.deliveryStatus)
@@ -295,6 +311,7 @@ public class EditCommand extends Command {
                     .add("address", address)
                     .add("boxes", boxes)
                     .add("orderDescription", orderDescription)
+                    .add("expiryDate", expiryDate)
                     .add("deliveryStatus", deliveryStatus)
                     .add("tags", tags)
                     .toString();

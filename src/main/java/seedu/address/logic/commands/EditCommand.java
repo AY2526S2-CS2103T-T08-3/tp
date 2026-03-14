@@ -2,6 +2,8 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_BOX;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DELIVERY_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EXPIRY_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
@@ -24,6 +26,8 @@ import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Box;
+import seedu.address.model.person.DeliveryStatus;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.ExpiryDate;
 import seedu.address.model.person.Name;
@@ -48,8 +52,10 @@ public class EditCommand extends Command {
             + "[" + PREFIX_PHONE + "PHONE] "
             + "[" + PREFIX_EMAIL + "EMAIL] "
             + "[" + PREFIX_ADDRESS + "ADDRESS] "
+            + "[" + PREFIX_BOX + "BOX] "
             + "[" + PREFIX_ORDER_DESCRIPTION + "ORDER_DESCRIPTION] "
             + "[" + PREFIX_EXPIRY_DATE + "EXPIRY_DATE] "
+            + "[" + PREFIX_DELIVERY_STATUS + "DELIVERY STATUS] "
             + "[" + PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " 1 "
             + PREFIX_PHONE + "91234567 "
@@ -106,12 +112,16 @@ public class EditCommand extends Command {
         Phone updatedPhone = editPersonDescriptor.getPhone().orElse(personToEdit.getPhone());
         Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail());
         Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.getAddress());
+        Set<Box> updatedBoxes = editPersonDescriptor.getBoxes().orElse(personToEdit.getBoxes());
         OrderDescription updatedOrderDescription = editPersonDescriptor.getOrderDescription()
                 .orElse(personToEdit.getOrderDescription());
+        DeliveryStatus updatedDeliveryStatus = editPersonDescriptor.getDeliveryStatus()
+                .orElse(personToEdit.getDeliveryStatus());
         Set<Tag> updatedTags = editPersonDescriptor.getTags().orElse(personToEdit.getTags());
         ExpiryDate updatedExpiry = editPersonDescriptor.getExpiryDate().orElse(personToEdit.getExpiryDate());
-        return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress,
-                updatedOrderDescription, updatedExpiry, updatedTags);
+        return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedBoxes,
+                updatedOrderDescription, updatedExpiry, updatedDeliveryStatus, updatedTags);
+
     }
 
     @Override
@@ -147,8 +157,10 @@ public class EditCommand extends Command {
         private Phone phone;
         private Email email;
         private Address address;
+        private Set<Box> boxes;
         private OrderDescription orderDescription;
         private ExpiryDate expiryDate;
+        private DeliveryStatus deliveryStatus;
         private Set<Tag> tags;
 
         public EditPersonDescriptor() {}
@@ -163,7 +175,9 @@ public class EditCommand extends Command {
             setEmail(toCopy.email);
             setAddress(toCopy.address);
             setExpiryDate(toCopy.expiryDate);
+            setBoxes(toCopy.boxes);
             setOrderDescription(toCopy.orderDescription);
+            setDeliveryStatus(toCopy.deliveryStatus);
             setTags(toCopy.tags);
         }
 
@@ -171,7 +185,8 @@ public class EditCommand extends Command {
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(name, phone, email, address, orderDescription, tags);
+            return CollectionUtil.isAnyNonNull(name, phone, email, address, orderDescription, deliveryStatus, tags,
+                    boxes);
         }
 
         public void setName(Name name) {
@@ -214,12 +229,37 @@ public class EditCommand extends Command {
             return Optional.ofNullable(expiryDate);
         }
 
+        /**
+         * Sets {@code boxes} to this object's {@code boxes}.
+         * A defensive copy of {@code boxes} is used internally.
+         */
+        public void setBoxes(Set<Box> boxes) {
+            this.boxes = (boxes != null) ? new HashSet<>(boxes) : null;
+        }
+
+        /**
+         * Returns an unmodifiable box set, which throws {@code UnsupportedOperationException}
+         * if modification is attempted.
+         * Returns {@code Optional#empty()} if {@code boxes} is null.
+         */
+        public Optional<Set<Box>> getBoxes() {
+            return (boxes != null) ? Optional.of(Collections.unmodifiableSet(boxes)) : Optional.empty();
+        }
+
         public void setOrderDescription(OrderDescription orderDescription) {
             this.orderDescription = orderDescription;
         }
 
         public Optional<OrderDescription> getOrderDescription() {
             return Optional.ofNullable(orderDescription);
+        }
+
+        public void setDeliveryStatus(DeliveryStatus deliveryStatus) {
+            this.deliveryStatus = deliveryStatus;
+        }
+
+        public Optional<DeliveryStatus> getDeliveryStatus() {
+            return Optional.ofNullable(deliveryStatus);
         }
 
         /**
@@ -256,7 +296,9 @@ public class EditCommand extends Command {
                     && Objects.equals(email, otherEditPersonDescriptor.email)
                     && Objects.equals(address, otherEditPersonDescriptor.address)
                     && Objects.equals(expiryDate, otherEditPersonDescriptor.expiryDate)
+                    && Objects.equals(boxes, otherEditPersonDescriptor.boxes)
                     && Objects.equals(orderDescription, otherEditPersonDescriptor.orderDescription)
+                    && Objects.equals(deliveryStatus, otherEditPersonDescriptor.deliveryStatus)
                     && Objects.equals(tags, otherEditPersonDescriptor.tags);
         }
 
@@ -267,8 +309,10 @@ public class EditCommand extends Command {
                     .add("phone", phone)
                     .add("email", email)
                     .add("address", address)
+                    .add("boxes", boxes)
                     .add("orderDescription", orderDescription)
                     .add("expiryDate", expiryDate)
+                    .add("deliveryStatus", deliveryStatus)
                     .add("tags", tags)
                     .toString();
         }

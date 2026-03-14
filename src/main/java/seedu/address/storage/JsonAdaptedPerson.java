@@ -11,6 +11,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Box;
+import seedu.address.model.person.DeliveryStatus;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.ExpiryDate;
 import seedu.address.model.person.Name;
@@ -30,27 +32,38 @@ class JsonAdaptedPerson {
     private final String phone;
     private final String email;
     private final String address;
+    private final List<JsonAdaptedBox> boxes;
     private final String orderDescription;
     private final String expiryDate;
+    private final String deliveryStatus;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
      */
     @JsonCreator
-    public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
-            @JsonProperty("email") String email, @JsonProperty("address") String address,
-            @JsonProperty("orderDescription") String orderDescription, @JsonProperty("expiryDate") String expiryDate,
-            @JsonProperty("tags") List<JsonAdaptedTag> tags) {
+    public JsonAdaptedPerson(@JsonProperty("name") String name,
+            @JsonProperty("phone") String phone,
+            @JsonProperty("email") String email,
+            @JsonProperty("address") String address,
+            @JsonProperty("tags") List<JsonAdaptedTag> tags,
+            @JsonProperty("orderDescription") String orderDescription,
+            @JsonProperty("expiryDate") String expiryDate,
+            @JsonProperty("deliveryStatus") String deliveryStatus,
+            @JsonProperty("boxes") List<JsonAdaptedBox> boxes) {
+
+
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.orderDescription = orderDescription;
         this.expiryDate = expiryDate;
+        this.deliveryStatus = deliveryStatus;
         if (tags != null) {
             this.tags.addAll(tags);
         }
+        this.boxes = boxes;
     }
 
     /**
@@ -63,9 +76,13 @@ class JsonAdaptedPerson {
         address = source.getAddress().value;
         orderDescription = source.getOrderDescription().value;
         expiryDate = source.getExpiryDate().value;
+        deliveryStatus = source.getDeliveryStatus().deliveryStatus;
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
+        boxes = source.getBoxes().stream()
+                .map(JsonAdaptedBox::new)
+                .collect(Collectors.toList());
     }
 
     /**
@@ -129,9 +146,28 @@ class JsonAdaptedPerson {
         }
         final OrderDescription modelOrderDescription = new OrderDescription(orderDescription);
 
+        if (deliveryStatus == null) {
+            throw new IllegalValueException(
+                    String.format(MISSING_FIELD_MESSAGE_FORMAT, DeliveryStatus.class.getSimpleName()));
+        }
+        if (!DeliveryStatus.isValidDeliveryStatus(deliveryStatus)) {
+            throw new IllegalValueException(DeliveryStatus.MESSAGE_CONSTRAINTS);
+        }
+        final DeliveryStatus modelDeliveryStatus = new DeliveryStatus(deliveryStatus);
+
+        if (boxes == null) {
+            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Box.class.getSimpleName()));
+        }
+
+        final List<Box> personBoxes = new ArrayList<>();
+        for (JsonAdaptedBox box : boxes) {
+            personBoxes.add(box.toModelType());
+        }
+
+        final Set<Box> modelBoxes = new HashSet<>(personBoxes);
         final Set<Tag> modelTags = new HashSet<>(personTags);
-        return new Person(modelName, modelPhone, modelEmail, modelAddress,
-                modelOrderDescription, modelExpiryDate, modelTags);
+        return new Person(modelName, modelPhone, modelEmail, modelAddress, modelBoxes,
+                modelOrderDescription, modelExpiryDate, modelDeliveryStatus, modelTags);
     }
 
 }

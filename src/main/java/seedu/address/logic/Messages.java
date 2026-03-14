@@ -47,6 +47,8 @@ public class Messages {
                 .append("; Subscription End Date: ")
                 .append(person.getExpiryDate())
                 .append(person.getOrderDescription())
+                .append("; Delivery Status: ")
+                .append(person.getDeliveryStatus())
                 .append("; Tags: ");
         person.getTags().forEach(builder::append);
         return builder.toString();

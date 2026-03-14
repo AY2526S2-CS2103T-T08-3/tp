@@ -1,6 +1,8 @@
 package seedu.address.testutil;
 
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_BOX;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DELIVERY_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EXPIRY_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
@@ -38,8 +40,12 @@ public class PersonUtil {
         sb.append(PREFIX_ADDRESS + person.getAddress().value + " ");
         sb.append(PREFIX_ORDER_DESCRIPTION + person.getOrderDescription().value + " ");
         sb.append(PREFIX_EXPIRY_DATE + person.getExpiryDate().value + " ");
+        sb.append(PREFIX_DELIVERY_STATUS + person.getDeliveryStatus().deliveryStatus + " ");
         person.getTags().stream().forEach(
             s -> sb.append(PREFIX_TAG + s.tagName + " ")
+        );
+        person.getBoxes().stream().forEach(
+                b -> sb.append(PREFIX_BOX + b.boxName + " ")
         );
         return sb.toString();
     }
@@ -52,12 +58,20 @@ public class PersonUtil {
         descriptor.getName().ifPresent(name -> sb.append(PREFIX_NAME).append(name.fullName).append(" "));
         descriptor.getPhone().ifPresent(phone -> sb.append(PREFIX_PHONE).append(phone.value).append(" "));
         descriptor.getEmail().ifPresent(email -> sb.append(PREFIX_EMAIL).append(email.value).append(" "));
-        descriptor.getAddress().ifPresent(address -> sb.append(PREFIX_ADDRESS).append(address.value).append(" "));
+        descriptor.getAddress()
+                .ifPresent(address -> sb.append(PREFIX_ADDRESS).append(address.value).append(" "));
         descriptor.getOrderDescription()
                 .ifPresent(orderDescription -> sb.append(PREFIX_ORDER_DESCRIPTION)
                         .append(orderDescription.value).append(" "));
         descriptor.getExpiryDate().ifPresent(expiryDate ->
                 sb.append(PREFIX_EXPIRY_DATE).append(expiryDate.value).append(" "));
+        descriptor.getDeliveryStatus()
+                .ifPresent(deliveryStatus -> sb.append(PREFIX_DELIVERY_STATUS)
+                        .append(deliveryStatus.deliveryStatus).append(" "));
+        descriptor.getBoxes()
+                .ifPresent(boxSet -> boxSet.forEach(
+                        b -> sb.append(PREFIX_BOX).append(b.boxName).append(" ")
+                ));
         if (descriptor.getTags().isPresent()) {
             Set<Tag> tags = descriptor.getTags().get();
             if (tags.isEmpty()) {

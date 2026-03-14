@@ -41,9 +41,13 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label orderDescription;
     @FXML
+    private Label deliveryStatus;
+    @FXML
     private FlowPane tags;
     @FXML
     private Label expiryDate;
+    @FXML
+    private FlowPane boxes;
 
     /**
      * Creates a {@code PersonCode} with the given {@code Person} and index to display.
@@ -57,9 +61,13 @@ public class PersonCard extends UiPart<Region> {
         address.setText(person.getAddress().value);
         email.setText(person.getEmail().value);
         orderDescription.setText("Order Description: " + person.getOrderDescription().value);
+        deliveryStatus.setText("Delivery Status: " + person.getDeliveryStatus().deliveryStatus);
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
         expiryDate.setText("Subscription end date: " + person.getExpiryDate().value);
+        person.getBoxes().stream()
+                .sorted(Comparator.comparing(box -> box.boxName))
+                .forEach(box -> boxes.getChildren().add(new Label(box.boxName)));
     }
 }

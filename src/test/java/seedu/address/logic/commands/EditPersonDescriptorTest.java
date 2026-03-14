@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_DELIVERY_STATUS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EXPIRY_DATE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
@@ -62,6 +63,10 @@ public class EditPersonDescriptorTest {
         editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withOrderDescription(VALID_ORDER_DESCRIPTION_BOB).build();
         assertFalse(DESC_AMY.equals(editedAmy));
 
+        // different delivery status -> returns false
+        editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withDeliveryStatus(VALID_DELIVERY_STATUS_BOB).build();
+        assertFalse(DESC_AMY.equals(editedAmy));
+
         // different tags -> returns false
         editedAmy = new EditPersonDescriptorBuilder(DESC_AMY).withTags(VALID_TAG_HUSBAND).build();
         assertFalse(DESC_AMY.equals(editedAmy));
@@ -74,9 +79,11 @@ public class EditPersonDescriptorTest {
                 + editPersonDescriptor.getName().orElse(null) + ", phone="
                 + editPersonDescriptor.getPhone().orElse(null) + ", email="
                 + editPersonDescriptor.getEmail().orElse(null) + ", address="
-                + editPersonDescriptor.getAddress().orElse(null) + ", orderDescription="
+                + editPersonDescriptor.getAddress().orElse(null) + ", boxes="
+                + editPersonDescriptor.getBoxes().orElse(null) + ", orderDescription="
                 + editPersonDescriptor.getExpiryDate().orElse(null) + ", expiryDate="
-                + editPersonDescriptor.getOrderDescription().orElse(null) + ", tags="
+                + editPersonDescriptor.getOrderDescription().orElse(null) + ", deliveryStatus="
+                + editPersonDescriptor.getDeliveryStatus().orElse(null) + ", tags="
                 + editPersonDescriptor.getTags().orElse(null) + "}";
         assertEquals(expected, editPersonDescriptor.toString());
     }

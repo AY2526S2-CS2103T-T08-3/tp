@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_ADDRESS_BOB;
+import static seedu.address.logic.commands.CommandTestUtil.VALID_DELIVERY_STATUS_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EMAIL_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_EXPIRY_DATE_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.VALID_NAME_BOB;
@@ -101,6 +102,10 @@ public class PersonTest {
         editedAlice = new PersonBuilder(ALICE).withExpiryDate(VALID_EXPIRY_DATE_BOB).build();
         assertFalse(ALICE.equals(editedAlice));
 
+        // different delivery status -> returns false
+        editedAlice = new PersonBuilder(ALICE).withDeliveryStatus(VALID_DELIVERY_STATUS_BOB).build();
+        assertFalse(ALICE.equals(editedAlice));
+
         // different tags -> returns false
         editedAlice = new PersonBuilder(ALICE).withTags(VALID_TAG_HUSBAND).build();
         assertFalse(ALICE.equals(editedAlice));
@@ -114,7 +119,8 @@ public class PersonTest {
 
     @Test
     public void hashCode_differentOrderDescription_differentHashCode() {
-        Person editedAlice = new PersonBuilder(ALICE).withOrderDescription(VALID_ORDER_DESCRIPTION_BOB).build();
+        Person editedAlice = new PersonBuilder(ALICE).withOrderDescription(VALID_ORDER_DESCRIPTION_BOB)
+                .withDeliveryStatus(VALID_DELIVERY_STATUS_BOB).build();
         assertFalse(ALICE.hashCode() == editedAlice.hashCode());
     }
 
@@ -126,13 +132,13 @@ public class PersonTest {
 
     @Test
     public void toStringMethod() {
-        String expected = Person.class.getCanonicalName() + "{name=" + ALICE.getName()
-                + ", phone=" + ALICE.getPhone()
-                + ", email=" + ALICE.getEmail()
-                + ", address=" + ALICE.getAddress()
-                + ", tags=" + ALICE.getTags()
+        String expected = Person.class.getCanonicalName() + "{name=" + ALICE.getName() + ", phone=" + ALICE.getPhone()
+                + ", email=" + ALICE.getEmail() + ", address=" + ALICE.getAddress()
+                + ", boxes=" + ALICE.getBoxes()
                 + ", orderDescription=" + ALICE.getOrderDescription()
-                + ", expiryDate=" + ALICE.getExpiryDate() + "}";
+                + ", expiryDate=" + ALICE.getExpiryDate()
+                + ", deliveryStatus=" + ALICE.getDeliveryStatus()
+                + ", tags=" + ALICE.getTags() + "}";
         assertEquals(expected, ALICE.toString());
     }
 }

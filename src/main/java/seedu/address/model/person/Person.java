@@ -21,24 +21,30 @@ public class Person {
     private final Phone phone;
     private final Email email;
     private final OrderDescription orderDescription;
+    private final DeliveryStatus deliveryStatus;
 
     // Data fields
     private final Address address;
     private final Set<Tag> tags = new HashSet<>();
     private final ExpiryDate expiryDate;
+    private final Set<Box> boxes = new HashSet<>();
 
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address,
-                  OrderDescription orderDescription, ExpiryDate expiryDate, Set<Tag> tags) {
-        requireAllNonNull(name, phone, email, address, orderDescription, tags);
+    public Person(Name name, Phone phone, Email email, Address address, Set<Box> boxes,
+                  OrderDescription orderDescription, ExpiryDate expiryDate,
+                  DeliveryStatus deliveryStatus, Set<Tag> tags) {
+        requireAllNonNull(name, phone, email, address, orderDescription, deliveryStatus, tags);
+
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
+        this.boxes.addAll(boxes);
         this.orderDescription = orderDescription;
         this.expiryDate = expiryDate;
+        this.deliveryStatus = deliveryStatus;
         this.tags.addAll(tags);
     }
 
@@ -58,12 +64,24 @@ public class Person {
         return address;
     }
 
+    /**
+     * Returns an immutable box set, which throws {@code UnsupportedOperationException}
+     * if modification is attempted.
+     */
+    public Set<Box> getBoxes() {
+        return Collections.unmodifiableSet(boxes);
+    }
+
     public OrderDescription getOrderDescription() {
         return orderDescription;
     }
 
     public ExpiryDate getExpiryDate() {
         return expiryDate;
+    }
+
+    public DeliveryStatus getDeliveryStatus() {
+        return deliveryStatus;
     }
 
     /**
@@ -107,15 +125,17 @@ public class Person {
                 && phone.equals(otherPerson.phone)
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
+                && boxes.equals(otherPerson.boxes)
                 && orderDescription.equals(otherPerson.orderDescription)
                 && expiryDate.equals(otherPerson.expiryDate)
+                && deliveryStatus.equals(otherPerson.deliveryStatus)
                 && tags.equals(otherPerson.tags);
     }
 
     @Override
     public int hashCode() {
         // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, orderDescription, expiryDate, tags);
+        return Objects.hash(name, phone, email, address, boxes, orderDescription, expiryDate, deliveryStatus, tags);
     }
 
     @Override
@@ -125,9 +145,11 @@ public class Person {
                 .add("phone", phone)
                 .add("email", email)
                 .add("address", address)
-                .add("tags", tags)
+                .add("boxes", boxes)
                 .add("orderDescription", orderDescription)
                 .add("expiryDate", expiryDate)
+                .add("deliveryStatus", deliveryStatus)
+                .add("tags", tags)
                 .toString();
     }
 

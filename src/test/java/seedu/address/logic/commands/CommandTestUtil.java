@@ -3,6 +3,8 @@ package seedu.address.logic.commands;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_BOX;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DELIVERY_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EXPIRY_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
@@ -40,8 +42,12 @@ public class CommandTestUtil {
     public static final String VALID_ORDER_DESCRIPTION_BOB = "4 croissants";
     public static final String VALID_EXPIRY_DATE_AMY = "2026-12-31";
     public static final String VALID_EXPIRY_DATE_BOB = "2026-12-30";
+    public static final String VALID_DELIVERY_STATUS_AMY = "pending";
+    public static final String VALID_DELIVERY_STATUS_BOB = "delivered";
     public static final String VALID_TAG_HUSBAND = "husband";
     public static final String VALID_TAG_FRIEND = "friend";
+    public static final String VALID_BOX_BOX1 = "Box1";
+    public static final String VALID_BOX_BOX2 = "Box2";
 
     public static final String NAME_DESC_AMY = " " + PREFIX_NAME + VALID_NAME_AMY;
     public static final String NAME_DESC_BOB = " " + PREFIX_NAME + VALID_NAME_BOB;
@@ -57,8 +63,14 @@ public class CommandTestUtil {
             " " + PREFIX_ORDER_DESCRIPTION + VALID_ORDER_DESCRIPTION_BOB;
     public static final String EXPIRY_DATE_DESC_AMY = " " + PREFIX_EXPIRY_DATE + VALID_EXPIRY_DATE_AMY;
     public static final String EXPIRY_DATE_DESC_BOB = " " + PREFIX_EXPIRY_DATE + VALID_EXPIRY_DATE_BOB;
+    public static final String DELIVERY_STATUS_DESC_AMY =
+            " " + PREFIX_DELIVERY_STATUS + VALID_DELIVERY_STATUS_AMY;
+    public static final String DELIVERY_STATUS_DESC_BOB =
+            " " + PREFIX_DELIVERY_STATUS + VALID_DELIVERY_STATUS_BOB;
     public static final String TAG_DESC_FRIEND = " " + PREFIX_TAG + VALID_TAG_FRIEND;
     public static final String TAG_DESC_HUSBAND = " " + PREFIX_TAG + VALID_TAG_HUSBAND;
+    public static final String BOX_DESC_BOX1 = " " + PREFIX_BOX + VALID_BOX_BOX1;
+    public static final String BOX_DESC_BOX2 = " " + PREFIX_BOX + VALID_BOX_BOX2;
 
     public static final String INVALID_NAME_DESC = " " + PREFIX_NAME + "James&"; // '&' not allowed in names
     public static final String INVALID_PHONE_DESC = " " + PREFIX_PHONE + "911a"; // 'a' not allowed in phones
@@ -66,7 +78,9 @@ public class CommandTestUtil {
     public static final String INVALID_ADDRESS_DESC = " " + PREFIX_ADDRESS; // empty string not allowed for addresses
     public static final String INVALID_ORDER_DESCRIPTION_DESC = " " + PREFIX_ORDER_DESCRIPTION + "#cake";
     public static final String INVALID_EXPIRY_DATE_DESC = " " + PREFIX_EXPIRY_DATE;
+    public static final String INVALID_DELIVERY_STATUS_DESC = " " + PREFIX_DELIVERY_STATUS + "maybe";
     public static final String INVALID_TAG_DESC = " " + PREFIX_TAG + "hubby*"; // '*' not allowed in tags
+    public static final String INVALID_BOX_DESC = " " + PREFIX_BOX + "box*"; // '*' not allowed in boxes
 
     public static final String PREAMBLE_WHITESPACE = "\t  \r  \n";
     public static final String PREAMBLE_NON_EMPTY = "NonEmptyPreamble";
@@ -79,11 +93,13 @@ public class CommandTestUtil {
                 .withPhone(VALID_PHONE_AMY).withEmail(VALID_EMAIL_AMY).withAddress(VALID_ADDRESS_AMY)
                 .withExpiryDate(VALID_EXPIRY_DATE_AMY)
                 .withOrderDescription(VALID_ORDER_DESCRIPTION_AMY)
+                .withDeliveryStatus(VALID_DELIVERY_STATUS_AMY)
                 .withTags(VALID_TAG_FRIEND).build();
         DESC_BOB = new EditPersonDescriptorBuilder().withName(VALID_NAME_BOB)
                 .withPhone(VALID_PHONE_BOB).withEmail(VALID_EMAIL_BOB).withAddress(VALID_ADDRESS_BOB)
                 .withExpiryDate(VALID_EXPIRY_DATE_BOB)
                 .withOrderDescription(VALID_ORDER_DESCRIPTION_BOB)
+                .withDeliveryStatus(VALID_DELIVERY_STATUS_BOB)
                 .withTags(VALID_TAG_HUSBAND, VALID_TAG_FRIEND).build();
     }
 

@@ -4,6 +4,8 @@ import java.util.HashSet;
 import java.util.Set;
 
 import seedu.address.model.person.Address;
+import seedu.address.model.person.Box;
+import seedu.address.model.person.DeliveryStatus;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.ExpiryDate;
 import seedu.address.model.person.Name;
@@ -24,6 +26,7 @@ public class PersonBuilder {
     public static final String DEFAULT_ADDRESS = "123, Jurong West Ave 6, #08-111";
     public static final String DEFAULT_ORDER_DESCRIPTION = "1 cake";
     public static final String DEFAULT_EXPIRY_DATE = "2026-12-31";
+    public static final String DEFAULT_DELIVERY_STATUS = "pending";
 
     private Name name;
     private Phone phone;
@@ -31,7 +34,9 @@ public class PersonBuilder {
     private Address address;
     private OrderDescription orderDescription;
     private ExpiryDate expiryDate;
+    private DeliveryStatus deliveryStatus;
     private Set<Tag> tags;
+    private Set<Box> boxes;
 
     /**
      * Creates a {@code PersonBuilder} with the default details.
@@ -43,7 +48,9 @@ public class PersonBuilder {
         address = new Address(DEFAULT_ADDRESS);
         orderDescription = new OrderDescription(DEFAULT_ORDER_DESCRIPTION);
         expiryDate = new ExpiryDate(DEFAULT_EXPIRY_DATE);
+        deliveryStatus = new DeliveryStatus(DEFAULT_DELIVERY_STATUS);
         tags = new HashSet<>();
+        boxes = SampleDataUtil.getBoxSet("Box1");
     }
 
     /**
@@ -56,7 +63,9 @@ public class PersonBuilder {
         address = personToCopy.getAddress();
         orderDescription = personToCopy.getOrderDescription();
         expiryDate = personToCopy.getExpiryDate();
+        deliveryStatus = personToCopy.getDeliveryStatus();
         tags = new HashSet<>(personToCopy.getTags());
+        boxes = new HashSet<>(personToCopy.getBoxes());
     }
 
     /**
@@ -72,6 +81,14 @@ public class PersonBuilder {
      */
     public PersonBuilder withTags(String ... tags) {
         this.tags = SampleDataUtil.getTagSet(tags);
+        return this;
+    }
+
+    /**
+     * Parses the {@code boxes} into a {@code Set<Box>} and set it to the {@code Person} that we are building.
+     */
+    public PersonBuilder withBoxes(String ... boxes) {
+        this.boxes = SampleDataUtil.getBoxSet(boxes);
         return this;
     }
 
@@ -115,8 +132,16 @@ public class PersonBuilder {
         return this;
     }
 
+    /**
+     * Sets the {@code DeliveryStatus} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withDeliveryStatus(String deliveryStatus) {
+        this.deliveryStatus = new DeliveryStatus(deliveryStatus);
+        return this;
+    }
+
     public Person build() {
-        return new Person(name, phone, email, address, orderDescription, expiryDate, tags);
+        return new Person(name, phone, email, address, boxes, orderDescription, expiryDate, deliveryStatus, tags);
     }
 
 }

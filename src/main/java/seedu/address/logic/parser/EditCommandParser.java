@@ -3,6 +3,8 @@ package seedu.address.logic.parser;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_BOX;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_DELIVERY_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EXPIRY_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
@@ -19,6 +21,7 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.EditCommand;
 import seedu.address.logic.commands.EditCommand.EditPersonDescriptor;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.person.Box;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -34,8 +37,8 @@ public class EditCommandParser implements Parser<EditCommand> {
     public EditCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS,
-                        PREFIX_ORDER_DESCRIPTION, PREFIX_EXPIRY_DATE, PREFIX_TAG);
+                ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS, PREFIX_BOX,
+                        PREFIX_ORDER_DESCRIPTION, PREFIX_EXPIRY_DATE, PREFIX_DELIVERY_STATUS, PREFIX_TAG);
 
         Index index;
 
@@ -46,7 +49,7 @@ public class EditCommandParser implements Parser<EditCommand> {
         }
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS,
-                PREFIX_ORDER_DESCRIPTION, PREFIX_EXPIRY_DATE);
+                PREFIX_ORDER_DESCRIPTION, PREFIX_EXPIRY_DATE, PREFIX_DELIVERY_STATUS);
 
         EditPersonDescriptor editPersonDescriptor = new EditPersonDescriptor();
 
@@ -70,7 +73,12 @@ public class EditCommandParser implements Parser<EditCommand> {
             editPersonDescriptor
             .setExpiryDate(ParserUtil.parseExpiryDate(argMultimap.getValue(PREFIX_EXPIRY_DATE).get()));
         }
+        if (argMultimap.getValue(PREFIX_DELIVERY_STATUS).isPresent()) {
+            editPersonDescriptor.setDeliveryStatus(
+                    ParserUtil.parseDeliveryStatus(argMultimap.getValue(PREFIX_DELIVERY_STATUS).get()));
+        }
         parseTagsForEdit(argMultimap.getAllValues(PREFIX_TAG)).ifPresent(editPersonDescriptor::setTags);
+        parseBoxesForEdit(argMultimap.getAllValues(PREFIX_BOX)).ifPresent(editPersonDescriptor::setBoxes);
 
         if (!editPersonDescriptor.isAnyFieldEdited()) {
             throw new ParseException(EditCommand.MESSAGE_NOT_EDITED);
@@ -92,6 +100,16 @@ public class EditCommandParser implements Parser<EditCommand> {
         }
         Collection<String> tagSet = tags.size() == 1 && tags.contains("") ? Collections.emptySet() : tags;
         return Optional.of(ParserUtil.parseTags(tagSet));
+    }
+
+    private Optional<Set<Box>> parseBoxesForEdit(Collection<String> boxes) throws ParseException {
+        assert boxes != null;
+
+        if (boxes.isEmpty()) {
+            return Optional.empty();
+        }
+        Collection<String> boxSet = boxes.size() == 1 && boxes.contains("") ? Collections.emptySet() : boxes;
+        return Optional.of(ParserUtil.parseBoxes(boxSet));
     }
 
 }

@@ -50,7 +50,7 @@ public class PersonBuilder {
         expiryDate = new ExpiryDate(DEFAULT_EXPIRY_DATE);
         deliveryStatus = new DeliveryStatus(DEFAULT_DELIVERY_STATUS);
         tags = new HashSet<>();
-        boxes = SampleDataUtil.getBoxSet("Box1");
+        boxes = SampleDataUtil.getBoxSet("box-1");
     }
 
     /**
@@ -141,7 +141,7 @@ public class PersonBuilder {
     }
 
     public Person build() {
-        return new Person(name, phone, email, address, boxes, orderDescription, expiryDate, deliveryStatus, tags);
+        return new Person(name, phone, email, address, orderDescription, expiryDate, deliveryStatus, boxes, tags);
     }
 
 }

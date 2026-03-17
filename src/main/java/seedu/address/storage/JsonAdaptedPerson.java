@@ -43,14 +43,14 @@ class JsonAdaptedPerson {
      */
     @JsonCreator
     public JsonAdaptedPerson(@JsonProperty("name") String name,
-            @JsonProperty("phone") String phone,
-            @JsonProperty("email") String email,
-            @JsonProperty("address") String address,
-            @JsonProperty("tags") List<JsonAdaptedTag> tags,
-            @JsonProperty("orderDescription") String orderDescription,
-            @JsonProperty("expiryDate") String expiryDate,
-            @JsonProperty("deliveryStatus") String deliveryStatus,
-            @JsonProperty("boxes") List<JsonAdaptedBox> boxes) {
+                             @JsonProperty("phone") String phone,
+                             @JsonProperty("email") String email,
+                             @JsonProperty("address") String address,
+                             @JsonProperty("tags") List<JsonAdaptedTag> tags,
+                             @JsonProperty("orderDescription") String orderDescription,
+                             @JsonProperty("expiryDate") String expiryDate,
+                             @JsonProperty("deliveryStatus") String deliveryStatus,
+                             @JsonProperty("boxes") List<JsonAdaptedBox> boxes) {
 
 
         this.name = name;
@@ -76,7 +76,7 @@ class JsonAdaptedPerson {
         address = source.getAddress().value;
         orderDescription = source.getOrderDescription().value;
         expiryDate = source.getExpiryDate().value;
-        deliveryStatus = source.getDeliveryStatus().deliveryStatus;
+        deliveryStatus = source.getDeliveryStatus().toString();
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
@@ -130,7 +130,7 @@ class JsonAdaptedPerson {
 
         if (expiryDate == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
-                                                          ExpiryDate.class.getSimpleName()));
+                    ExpiryDate.class.getSimpleName()));
         }
         if (!ExpiryDate.isValidExpiryDate(expiryDate)) {
             throw new IllegalValueException(ExpiryDate.MESSAGE_CONSTRAINTS);
@@ -150,10 +150,12 @@ class JsonAdaptedPerson {
             throw new IllegalValueException(
                     String.format(MISSING_FIELD_MESSAGE_FORMAT, DeliveryStatus.class.getSimpleName()));
         }
-        if (!DeliveryStatus.isValidDeliveryStatus(deliveryStatus)) {
+        final DeliveryStatus modelDeliveryStatus;
+        try {
+            modelDeliveryStatus = DeliveryStatus.fromString(deliveryStatus);
+        } catch (IllegalArgumentException e) {
             throw new IllegalValueException(DeliveryStatus.MESSAGE_CONSTRAINTS);
         }
-        final DeliveryStatus modelDeliveryStatus = new DeliveryStatus(deliveryStatus);
 
         if (boxes == null) {
             throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT, Box.class.getSimpleName()));

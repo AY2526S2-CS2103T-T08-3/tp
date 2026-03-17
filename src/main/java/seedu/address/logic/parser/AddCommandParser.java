@@ -7,7 +7,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_DELIVERY_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EXPIRY_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_ORDER_DESCRIPTION;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARKS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
@@ -40,16 +40,16 @@ public class AddCommandParser implements Parser<AddCommand> {
     public AddCommand parse(String args) throws ParseException {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS,
-                        PREFIX_ORDER_DESCRIPTION, PREFIX_EXPIRY_DATE, PREFIX_DELIVERY_STATUS, PREFIX_BOX, PREFIX_TAG);
+                        PREFIX_REMARKS, PREFIX_EXPIRY_DATE, PREFIX_DELIVERY_STATUS, PREFIX_BOX, PREFIX_TAG);
 
         if (!arePrefixesPresent(argMultimap, PREFIX_NAME, PREFIX_ADDRESS, PREFIX_PHONE, PREFIX_EMAIL,
-                PREFIX_ORDER_DESCRIPTION, PREFIX_EXPIRY_DATE, PREFIX_DELIVERY_STATUS, PREFIX_BOX)
+                PREFIX_REMARKS, PREFIX_EXPIRY_DATE, PREFIX_DELIVERY_STATUS, PREFIX_BOX)
                 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
         }
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS,
-                PREFIX_ORDER_DESCRIPTION, PREFIX_EXPIRY_DATE, PREFIX_DELIVERY_STATUS);
+                PREFIX_REMARKS, PREFIX_EXPIRY_DATE, PREFIX_DELIVERY_STATUS);
 
         Name name = ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get());
         Phone phone = ParserUtil.parsePhone(argMultimap.getValue(PREFIX_PHONE).get());
@@ -57,7 +57,7 @@ public class AddCommandParser implements Parser<AddCommand> {
         Address address = ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS).get());
         Set<Box> boxList = ParserUtil.parseBoxes(argMultimap.getAllValues(PREFIX_BOX));
         Remark remark =
-                ParserUtil.parseRemark(argMultimap.getValue(PREFIX_ORDER_DESCRIPTION).get());
+                ParserUtil.parseRemark(argMultimap.getValue(PREFIX_REMARKS).get());
         ExpiryDate expiryDate = ParserUtil.parseExpiryDate(argMultimap.getValue(PREFIX_EXPIRY_DATE).get());
         DeliveryStatus deliveryStatus =
                 ParserUtil.parseDeliveryStatus(argMultimap.getValue(PREFIX_DELIVERY_STATUS).get());

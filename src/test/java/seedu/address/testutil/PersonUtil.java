@@ -6,7 +6,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_DELIVERY_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EXPIRY_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_ORDER_DESCRIPTION;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARKS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
@@ -38,7 +38,7 @@ public class PersonUtil {
         sb.append(PREFIX_PHONE + person.getPhone().value + " ");
         sb.append(PREFIX_EMAIL + person.getEmail().value + " ");
         sb.append(PREFIX_ADDRESS + person.getAddress().value + " ");
-        sb.append(PREFIX_ORDER_DESCRIPTION + person.getRemark().value + " ");
+        sb.append(PREFIX_REMARKS + person.getRemark().value + " ");
         sb.append(PREFIX_EXPIRY_DATE + person.getExpiryDate().value + " ");
         sb.append(PREFIX_DELIVERY_STATUS + person.getDeliveryStatus().deliveryStatus + " ");
         person.getTags().stream().forEach(
@@ -61,7 +61,7 @@ public class PersonUtil {
         descriptor.getAddress()
                 .ifPresent(address -> sb.append(PREFIX_ADDRESS).append(address.value).append(" "));
         descriptor.getRemark()
-                .ifPresent(remark -> sb.append(PREFIX_ORDER_DESCRIPTION)
+                .ifPresent(remark -> sb.append(PREFIX_REMARKS)
                         .append(remark.value).append(" "));
         descriptor.getExpiryDate().ifPresent(expiryDate ->
                 sb.append(PREFIX_EXPIRY_DATE).append(expiryDate.value).append(" "));

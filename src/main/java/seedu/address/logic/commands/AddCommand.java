@@ -7,7 +7,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_DELIVERY_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EXPIRY_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_ORDER_DESCRIPTION;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARKS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
@@ -31,7 +31,7 @@ public class AddCommand extends Command {
             + PREFIX_EMAIL + "EMAIL "
             + PREFIX_ADDRESS + "ADDRESS "
             + PREFIX_BOX + "BOXES "
-            + PREFIX_ORDER_DESCRIPTION + "ORDER_DESCRIPTION "
+            + PREFIX_REMARKS + "ORDER_DESCRIPTION "
             + PREFIX_DELIVERY_STATUS + "DELIVERY_STATUS "
             + "[" + PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " "
@@ -39,7 +39,7 @@ public class AddCommand extends Command {
             + PREFIX_PHONE + "98765432 "
             + PREFIX_EMAIL + "johnd@example.com "
             + PREFIX_ADDRESS + "311, Clementi Ave 2, #02-25 "
-            + PREFIX_ORDER_DESCRIPTION + "2 fishburgers "
+            + PREFIX_REMARKS + "2 fishburgers "
             + PREFIX_DELIVERY_STATUS + "delivered "
             + PREFIX_EXPIRY_DATE + "2026-12-31 "
             + PREFIX_BOX + "box-1 "

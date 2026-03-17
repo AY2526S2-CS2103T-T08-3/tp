@@ -47,7 +47,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_DELIVERY_STATUS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EXPIRY_DATE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
-import static seedu.address.logic.parser.CliSyntax.PREFIX_ORDER_DESCRIPTION;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_REMARKS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
@@ -137,7 +137,7 @@ public class AddCommandParserTest {
                         + DELIVERY_STATUS_DESC_AMY
                         + validExpectedPersonString,
                 Messages.getErrorMessageForDuplicatePrefixes(PREFIX_NAME, PREFIX_ADDRESS, PREFIX_EMAIL, PREFIX_PHONE,
-                        PREFIX_ORDER_DESCRIPTION, PREFIX_EXPIRY_DATE, PREFIX_DELIVERY_STATUS));
+                        PREFIX_REMARKS, PREFIX_EXPIRY_DATE, PREFIX_DELIVERY_STATUS));
 
         // multiple delivery status
         assertParseFailure(parser, DELIVERY_STATUS_DESC_AMY + validExpectedPersonString,
@@ -163,7 +163,7 @@ public class AddCommandParserTest {
 
         // invalid Remark
         assertParseFailure(parser, INVALID_ORDER_DESCRIPTION_DESC + validExpectedPersonString,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_ORDER_DESCRIPTION));
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_REMARKS));
 
         // invalid expiry date
         assertParseFailure(parser, INVALID_EXPIRY_DATE_DESC + validExpectedPersonString,
@@ -189,7 +189,7 @@ public class AddCommandParserTest {
 
         // invalid Remark
         assertParseFailure(parser, validExpectedPersonString + INVALID_ORDER_DESCRIPTION_DESC,
-                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_ORDER_DESCRIPTION));
+                Messages.getErrorMessageForDuplicatePrefixes(PREFIX_REMARKS));
 
         // invalid expiry date
         assertParseFailure(parser, validExpectedPersonString + INVALID_EXPIRY_DATE_DESC,

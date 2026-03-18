@@ -29,13 +29,8 @@ public class MarkCommandParser implements Parser<MarkCommand> {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, MarkCommand.MESSAGE_USAGE));
         }
 
-        try {
-            Index index = ParserUtil.parseIndex(matcher.group("index"));
-            DeliveryStatus newStatus = ParserUtil.parseDeliveryStatus(matcher.group("newStatus"));
-            return new MarkCommand(index, newStatus);
-        } catch (ParseException pe) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, MarkCommand.MESSAGE_USAGE), pe);
-        }
+        Index index = ParserUtil.parseIndex(matcher.group("index"));
+        DeliveryStatus newStatus = ParserUtil.parseDeliveryStatus(matcher.group("newStatus"));
+        return new MarkCommand(index, newStatus);
     }
 }

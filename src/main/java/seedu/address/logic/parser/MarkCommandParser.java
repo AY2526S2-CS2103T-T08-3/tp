@@ -30,7 +30,7 @@ public class MarkCommandParser implements Parser<MarkCommand> {
         }
 
         Index index = ParserUtil.parseIndex(matcher.group("index"));
-        DeliveryStatus newStatus = ParserUtil.parseDeliveryStatus(matcher.group("newStatus"));
+        DeliveryStatus newStatus = ParserUtil.parseDeliveryStatus(matcher.group("newStatus").trim());
         return new MarkCommand(index, newStatus);
     }
 }

@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
@@ -34,14 +35,14 @@ public class MarkCommandParserTest {
     public void parse_invalidArgs_throwsParseException() {
         // invalid index
         assertParseFailure(parser, "a DELIVERED",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MarkCommand.MESSAGE_USAGE));
+                String.format(ParserUtil.MESSAGE_INVALID_INDEX, MarkCommand.MESSAGE_USAGE));
 
         // missing delivery status
         assertParseFailure(parser, "1",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MarkCommand.MESSAGE_USAGE));
+                String.format(DeliveryStatus.MESSAGE_CONSTRAINTS, MarkCommand.MESSAGE_USAGE));
 
         // invalid delivery status
         assertParseFailure(parser, "1 INVALIDSTATUS",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MarkCommand.MESSAGE_USAGE));
+                String.format(DeliveryStatus.MESSAGE_CONSTRAINTS, MarkCommand.MESSAGE_USAGE));
     }
 }

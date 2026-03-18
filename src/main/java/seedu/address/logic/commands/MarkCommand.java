@@ -11,7 +11,15 @@ import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
-import seedu.address.model.person.*;
+import seedu.address.model.person.Address;
+import seedu.address.model.person.Box;
+import seedu.address.model.person.DeliveryStatus;
+import seedu.address.model.person.Email;
+import seedu.address.model.person.ExpiryDate;
+import seedu.address.model.person.Name;
+import seedu.address.model.person.Person;
+import seedu.address.model.person.Phone;
+import seedu.address.model.person.Remark;
 import seedu.address.model.tag.Tag;
 
 /**
@@ -37,6 +45,21 @@ public class MarkCommand extends Command {
     public final Index targetIndex;
     public final DeliveryStatus newDeliveryStatus;
 
+    /**
+     * Marks a person's delivery status in the address book.
+     * <p>
+     * The command identifies a person using the index displayed in the most recent
+     * person listing and updates their {@link DeliveryStatus} to the specified value.
+     * Supported statuses include {@code PENDING}, {@code PACKED}, and {@code DELIVERED}.
+     * <p>
+     * Example usage:
+     * <pre>
+     *     {@code mark 1}   // Marks the first person in the list as DELIVERED
+     * </pre>
+     * <p>
+     * The command returns a {@link CommandResult} containing a feedback message
+     * indicating the updated delivery status of the person.
+     */
     public MarkCommand(Index targetIndex, DeliveryStatus newDeliveryStatus) {
         this.targetIndex = targetIndex;
         this.newDeliveryStatus = newDeliveryStatus;
@@ -58,14 +81,14 @@ public class MarkCommand extends Command {
         model.setPerson(personToMark, markedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
 
-        String MESSAGE = switch (newDeliveryStatus) {
-            case PENDING -> MESSAGE_MARK_PENDING;
-            case PACKED -> MESSAGE_MARK_PACKED;
-            case DELIVERED -> MESSAGE_MARK_DELIVERED;
+        String message = switch (newDeliveryStatus) {
+        case PENDING -> MESSAGE_MARK_PENDING;
+        case PACKED -> MESSAGE_MARK_PACKED;
+        case DELIVERED -> MESSAGE_MARK_DELIVERED;
         };
 
         return new CommandResult(
-                String.format(MESSAGE, Messages.format(markedPerson))
+                String.format(message, Messages.format(markedPerson))
         );
     }
 
@@ -107,6 +130,4 @@ public class MarkCommand extends Command {
                 .add("deliveryStatus", newDeliveryStatus)
                 .toString();
     }
-
-
 }

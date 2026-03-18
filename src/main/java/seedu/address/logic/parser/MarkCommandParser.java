@@ -2,14 +2,13 @@ package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
-import seedu.address.commons.core.index.Index;
-import seedu.address.logic.commands.MarkCommand;
-import seedu.address.logic.commands.RemarkCommand;
-import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.person.DeliveryStatus;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import seedu.address.commons.core.index.Index;
+import seedu.address.logic.commands.MarkCommand;
+import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.person.DeliveryStatus;
 
 /**
  * Parses input arguments and creates a new MarkCommand object
@@ -39,5 +38,4 @@ public class MarkCommandParser implements Parser<MarkCommand> {
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, MarkCommand.MESSAGE_USAGE), pe);
         }
     }
-
 }

@@ -7,23 +7,23 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 
 import org.junit.jupiter.api.Test;
 
-import seedu.address.logic.commands.MarkDeliveredCommand;
+import seedu.address.logic.commands.MarkCommand;
 
 /**
- * Tests for MarkDeliveredCommandParser.
+ * Tests for MarkCommandParser.
  */
-public class MarkDeliveredCommandParserTest {
+public class MarkCommandParserTest {
 
-    private MarkDeliveredCommandParser parser = new MarkDeliveredCommandParser();
+    private MarkCommandParser parser = new MarkCommandParser();
 
     @Test
-    public void parse_validArgs_returnsMarkDeliveredCommand() {
-        assertParseSuccess(parser, "1", new MarkDeliveredCommand(INDEX_FIRST_PERSON));
+    public void parse_validArgs_returnsMarkCommand() {
+        assertParseSuccess(parser, "1", new MarkCommand(INDEX_FIRST_PERSON));
     }
 
     @Test
     public void parse_invalidArgs_throwsParseException() {
         assertParseFailure(parser, "a",
-                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MarkDeliveredCommand.MESSAGE_USAGE));
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, MarkCommand.MESSAGE_USAGE));
     }
 }

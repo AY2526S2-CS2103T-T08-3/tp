@@ -21,19 +21,19 @@ import seedu.address.model.person.Person;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for
- * {@code MarkDeliveredCommand}.
+ * {@code MarkCommand}.
  */
-public class MarkDeliveredCommandTest {
+public class MarkCommandTest {
 
     private final Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
     public void execute_validIndexUnfilteredList_success() {
         Person personToMark = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        MarkDeliveredCommand command = new MarkDeliveredCommand(INDEX_FIRST_PERSON);
+        MarkCommand command = new MarkCommand(INDEX_FIRST_PERSON);
 
         String expectedMessage = String.format(
-                MarkDeliveredCommand.MESSAGE_MARK_DELIVERED_SUCCESS,
+                MarkCommand.MESSAGE_MARK_DELIVERED_SUCCESS,
                 Messages.format(personToMark));
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
@@ -44,7 +44,7 @@ public class MarkDeliveredCommandTest {
     @Test
     public void execute_invalidIndexUnfilteredList_throwsCommandException() {
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
-        MarkDeliveredCommand command = new MarkDeliveredCommand(outOfBoundIndex);
+        MarkCommand command = new MarkCommand(outOfBoundIndex);
 
         assertCommandFailure(command, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
     }
@@ -57,10 +57,10 @@ public class MarkDeliveredCommandTest {
         showPersonAtIndex(model, INDEX_FIRST_PERSON);
 
         Person personToMark = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
-        MarkDeliveredCommand command = new MarkDeliveredCommand(INDEX_FIRST_PERSON);
+        MarkCommand command = new MarkCommand(INDEX_FIRST_PERSON);
 
         String expectedMessage = String.format(
-                MarkDeliveredCommand.MESSAGE_MARK_DELIVERED_SUCCESS,
+                MarkCommand.MESSAGE_MARK_DELIVERED_SUCCESS,
                 Messages.format(personToMark));
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
@@ -77,21 +77,21 @@ public class MarkDeliveredCommandTest {
         assertTrue(outOfBoundIndex.getZeroBased()
                 < model.getAddressBook().getPersonList().size());
 
-        MarkDeliveredCommand command = new MarkDeliveredCommand(outOfBoundIndex);
+        MarkCommand command = new MarkCommand(outOfBoundIndex);
 
         assertCommandFailure(command, model, Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
     }
 
     @Test
     public void equals() {
-        MarkDeliveredCommand firstCommand = new MarkDeliveredCommand(INDEX_FIRST_PERSON);
-        MarkDeliveredCommand secondCommand = new MarkDeliveredCommand(INDEX_SECOND_PERSON);
+        MarkCommand firstCommand = new MarkCommand(INDEX_FIRST_PERSON);
+        MarkCommand secondCommand = new MarkCommand(INDEX_SECOND_PERSON);
 
         // same object -> true
         assertTrue(firstCommand.equals(firstCommand));
 
         // same values -> true
-        MarkDeliveredCommand firstCommandCopy = new MarkDeliveredCommand(INDEX_FIRST_PERSON);
+        MarkCommand firstCommandCopy = new MarkCommand(INDEX_FIRST_PERSON);
         assertTrue(firstCommand.equals(firstCommandCopy));
 
         // different types -> false
@@ -107,8 +107,8 @@ public class MarkDeliveredCommandTest {
     @Test
     public void toStringMethod() {
         Index targetIndex = Index.fromOneBased(1);
-        MarkDeliveredCommand command = new MarkDeliveredCommand(targetIndex);
-        String expected = MarkDeliveredCommand.class.getCanonicalName()
+        MarkCommand command = new MarkCommand(targetIndex);
+        String expected = MarkCommand.class.getCanonicalName()
                 + "{targetIndex=" + targetIndex + "}";
         assertEquals(expected, command.toString());
     }

@@ -9,13 +9,15 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class Address {
 
-    public static final String MESSAGE_CONSTRAINTS = "Addresses can take any values, and it should not be blank";
+    public static final String MESSAGE_CONSTRAINTS = "Address should not be blank and must contain a 6-digit "
+            + "postal code.";
 
     /*
      * The first character of the address must not be a whitespace,
      * otherwise " " (a blank string) becomes a valid input.
+     * The address must also contain a 6-digit postal code.
      */
-    public static final String VALIDATION_REGEX = "[^\\s].*";
+    private static final String VALIDATION_REGEX = "[^\\s].*.*\\b\\d{6}\\b.*";
 
     public final String value;
 

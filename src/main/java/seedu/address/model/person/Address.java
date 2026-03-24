@@ -17,7 +17,7 @@ public class Address {
      * otherwise " " (a blank string) becomes a valid input.
      * The address must also contain a 6-digit postal code.
      */
-    private static final String VALIDATION_REGEX = "[^\\s].*.*\\b\\d{6}\\b.*";
+    private static final String VALIDATION_REGEX = "^(?=.*\\b\\d{6}\\b).+$";
 
     public final String value;
 

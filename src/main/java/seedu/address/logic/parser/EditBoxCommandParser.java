@@ -12,7 +12,6 @@ import java.util.stream.Stream;
 import seedu.address.logic.commands.EditBoxCommand;
 import seedu.address.logic.commands.EditBoxCommand.EditBoxDescriptor;
 import seedu.address.logic.parser.exceptions.ParseException;
-import seedu.address.model.person.Box;
 import seedu.address.model.person.Name;
 
 /**
@@ -34,24 +33,27 @@ public class EditBoxCommandParser implements Parser<EditBoxCommand> {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditBoxCommand.MESSAGE_USAGE));
         }
 
-        Name subscriberName = ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get());
-        String oldBoxName = argMultimap.getValue(PREFIX_BOX).get().trim();
+        Name subscriberName;
+        String oldBoxName;
 
-        if (!Box.isValidBoxName(oldBoxName)) {
-            throw new ParseException(Box.MESSAGE_CONSTRAINTS);
+        try {
+            subscriberName = ParserUtil.parseName(argMultimap.getValue(PREFIX_NAME).get());
+            oldBoxName = ParserUtil.parseBoxName(argMultimap.getValue(PREFIX_BOX).get());
+        } catch (ParseException pe) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditBoxCommand.MESSAGE_USAGE), pe);
         }
+
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_BOX, PREFIX_NEW_BOX, PREFIX_EXPIRY_DATE);
 
         EditBoxDescriptor editBoxDescriptor = new EditBoxDescriptor();
 
         if (argMultimap.getValue(PREFIX_NEW_BOX).isPresent()) {
             editBoxDescriptor.setBoxName(
-                    argMultimap.getValue(PREFIX_NEW_BOX).get().trim()
-            );
+                    ParserUtil.parseBoxName(argMultimap.getValue(PREFIX_NEW_BOX).get()));
         }
         if (argMultimap.getValue(PREFIX_EXPIRY_DATE).isPresent()) {
             editBoxDescriptor.setExpiryDate(
-                    ParserUtil.parseExpiryDate(argMultimap.getValue(PREFIX_EXPIRY_DATE).get())
-            );
+                    ParserUtil.parseExpiryDate(argMultimap.getValue(PREFIX_EXPIRY_DATE).get()));
         }
 
         if (!editBoxDescriptor.isAnyFieldEdited()) {

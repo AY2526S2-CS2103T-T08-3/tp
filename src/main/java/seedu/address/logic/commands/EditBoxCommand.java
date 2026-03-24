@@ -162,6 +162,32 @@ public class EditBoxCommand extends Command {
                 personExpiryDate, deliveryStatus, tags);
     }
 
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+
+        // instanceof handles nulls
+        if (!(other instanceof EditBoxCommand)) {
+            return false;
+        }
+
+        EditBoxCommand otherEditBoxCommand = (EditBoxCommand) other;
+        return subscriberName.equals(otherEditBoxCommand.subscriberName)
+                && boxName.equals(otherEditBoxCommand.boxName)
+                && editBoxDescriptor.equals(otherEditBoxCommand.editBoxDescriptor);
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .add("subscriberName", subscriberName)
+                .add("boxName", boxName)
+                .add("editBoxDescriptor", editBoxDescriptor)
+                .toString();
+    }
+
     /**
      * Stores the details to edit the box with. Each non-empty field value will replace the corresponding
      * field value of the specified box under the specified subscriber.

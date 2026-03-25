@@ -31,7 +31,7 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 
    * `list` : Lists all contacts.
 
-   * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 b/box-1 ex/2026-12-31 s/pending` : Adds a person with a box, default remark, expiry date, and delivery status.
+   * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 b/box-1 ex/2026-12-31` : Adds a person with a box, default remark, expiry date, and "Pending" delivery status.
 
    * `delete 3` : Deletes the 3rd contact shown in the current list.
 
@@ -80,7 +80,7 @@ Format: `help`
 
 Adds a person to the address book.
 
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [o/REMARK] ex/EXPIRY_DATE s/DELIVERY_STATUS b/BOX… [t/TAG]…​`
+Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [o/REMARK] ex/EXPIRY_DATE b/BOX… [t/TAG]…​`
 
 <box type="tip" seamless>
 
@@ -88,10 +88,11 @@ Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [o/REMARK] ex/EXPIRY_DATE s
 </box>
 
 **Important Note:** The expiry date input will be applied to **ALL** Boxes added in that same command.
+**Important Note:** Default delivery status is set to "Pending"
 
 Examples:
-* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 b/box-1 ex/2026-12-31 s/pending`
-* `add n/Betsy Crowe p/1234567 e/betsycrowe@example.com a/Newgate Prison b/box-1 b/box-2 o/weekly pastry set ex/2026-12-15 s/delivered t/friend t/criminal`
+* `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01 b/box-1 ex/2026-12-31`
+* `add n/Betsy Crowe p/1234567 e/betsycrowe@example.com a/Newgate Prison b/box-1 b/box-2 o/weekly pastry set ex/2026-12-15 t/friend t/criminal`
 
 ### Listing all persons : `list`
 
@@ -103,7 +104,7 @@ Format: `list`
 
 Edits an existing person in the address book.
 
-Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [o/REMARK] [ex/EXPIRY_DATE] [s/DELIVERY_STATUS] [t/TAG]…​`
+Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [o/REMARK] [ex/EXPIRY_DATE] [t/TAG]…​`
 
 * Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
 * At least one of the optional fields must be provided.
@@ -114,8 +115,23 @@ Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [o/REMARK] [ex/EXPI
 * You can update the remark either with `edit ... o/NEW_REMARK` or with the dedicated [`remark`](#updating-a-persons-remark--remark) command below.
 
 Examples:
-*  `edit 1 p/91234567 e/johndoe@example.com s/delivered` Edits the phone number, email address, and delivery status of the 1st person.
+*  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st person.
 *  `edit 2 n/Betsy Crower o/prefers morning delivery t/` Edits the name and remark of the 2nd person and clears all existing tags.
+
+### Editing a box of a person : `editbox`
+
+Edits an existing box of an existing person in the address book.
+
+Format: `edit NAME BOX_NAME [nb/NEW_BOX_NAME] [ex/EXPIRY_DATE]`
+
+* Edits the person specified by the person's `NAME`.
+* At least one of the optional fields must be provided.
+* Existing values will be updated to the input values.
+
+Examples:
+* `editbox n/Amy b/box-1 nb/box-2` Edits the name of box-1 under Amy to box-2.
+* `editbox n/Amy b/box-1 ex/2026-12-31` Edits the expiry date of box-1 under Amy.
+* `editbox n/Amy b/box-1 nb/box-2 ex/2026-12-31` Edits the name and expiry date of box-1 under Amy.
 
 ### Updating a person's remark : `remark`
 
@@ -230,10 +246,10 @@ _Details coming soon ..._
 
 Action     | Format, Examples
 -----------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-**Add**    | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS b/BOX [o/REMARK] ex/EXPIRY_DATE s/DELIVERY_STATUS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 b/box-1 ex/2026-12-31 s/pending t/friend`
+**Add**    | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS b/BOX [o/REMARK] ex/EXPIRY_DATE [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 b/box-1 ex/2026-12-31 s/pending t/friend`
 **Clear**  | `clear`
 **Delete** | `delete INDEX` or `delete EMAIL`<br> e.g., `delete 3` `delete test@example.com`
-**Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [b/BOX] [o/REMARK] [ex/EXPIRY_DATE] [s/DELIVERY_STATUS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee o/prefers morning delivery`
+**Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [b/BOX] [o/REMARK] [ex/EXPIRY_DATE] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee o/prefers morning delivery`
 **Find**   | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
 **Mark** | `mark INDEX STATUS`<br> e.g., `mark 1 delivered`
 **Remark** | `remark INDEX REMARK`<br> e.g., `remark 2 allergic to peanuts`

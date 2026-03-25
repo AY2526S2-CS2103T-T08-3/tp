@@ -83,7 +83,7 @@ public class ParserUtil {
         requireNonNull(address);
         String trimmedAddress = address.trim();
         if (!Address.isValidAddress(trimmedAddress)) {
-            throw new ParseException(Address.MESSAGE_CONSTRAINTS);
+            throw new ParseException(Address.getValidationMessage(trimmedAddress));
         }
         return new Address(trimmedAddress);
     }
@@ -190,6 +190,21 @@ public class ParserUtil {
             throw new ParseException(Box.MESSAGE_CONSTRAINTS);
         }
         return new Box(trimmedBox, expiryDate);
+    }
+
+    /**
+     * Parses a {@code String box} into a {@code String} for name-only parsing.
+     * Leading and trailing whitespaces will be trimmed.
+     *
+     * @throws ParseException if the given {@code box} is invalid.
+     */
+    public static String parseBoxName(String box) throws ParseException {
+        requireNonNull(box);
+        String trimmedBox = box.trim();
+        if (!Box.isValidBoxName(trimmedBox)) {
+            throw new ParseException(Box.MESSAGE_CONSTRAINTS);
+        }
+        return trimmedBox;
     }
 
     /**

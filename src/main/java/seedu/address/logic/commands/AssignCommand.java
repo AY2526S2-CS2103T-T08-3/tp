@@ -69,9 +69,9 @@ public class AssignCommand extends Command {
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
-
         requireNonNull(model);
-        // TODO: integrate method that returns sorted subscribers
+        // TODO: Integrate resetting of sorted subscribers (might have previously been sorted)
+        // TODO: integrate method that returns sorted subscribers from clustering algo
         List<List<Person>> sortedSubscribers = new ArrayList<List<Person>>();
 
         sortedSubscribers.add(model.getFilteredPersonList()); // For Testing
@@ -84,6 +84,7 @@ public class AssignCommand extends Command {
             for (Person personInSameCluster : sortedSubscribers.get(i)) {
                 Person assignedPerson = assignDriver(personInSameCluster, assignedDriver);
                 model.setPerson(personInSameCluster, assignedPerson);
+                // TODO: Update partitioned list in AddressBook store for export/filter command
             }
         }
 

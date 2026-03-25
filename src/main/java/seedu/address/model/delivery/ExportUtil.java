@@ -1,14 +1,12 @@
 package seedu.address.model.delivery;
 
-import seedu.address.logic.commands.ExportCommand;
-import seedu.address.model.delivery.DeliveryAssignmentHashMap;
-import seedu.address.model.delivery.Driver;
-import seedu.address.model.person.Person;
-
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
+
+import seedu.address.logic.commands.ExportCommand;
+import seedu.address.model.person.Person;
 
 /**
  * Utility class for exporting delivery assignments as HTML.

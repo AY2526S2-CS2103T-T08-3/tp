@@ -90,6 +90,10 @@ public class DeliveryAssignmentHashMap {
         }
     }
 
+    public static boolean isExportable() {
+        return !assignments.isEmpty();
+    }
+
     /**
      * Clears all existing delivery assignments.
      *

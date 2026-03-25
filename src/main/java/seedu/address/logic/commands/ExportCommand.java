@@ -1,11 +1,13 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.model.delivery.DeliveryAssignmentHashMap.isExportable;
 
 import java.io.File;
 import java.io.IOException;
 
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.logic.commands.exceptions.NotExportableException;
 import seedu.address.model.Model;
 import seedu.address.model.delivery.DeliveryAssignmentHashMap;
 import seedu.address.model.delivery.ExportUtil;
@@ -20,13 +22,15 @@ import seedu.address.model.delivery.ExportUtil;
 public class ExportCommand extends Command {
 
     public static final String COMMAND_WORD = "export";
-    public static final String MESSAGE_SUCCESS = "Exported delivery assignments to file.";
+    public static final String MESSAGE_SUCCESS = "File successfully saved to: %s";
     public static final String MESSAGE_FAILURE = "Failed to export delivery assignments.";
 
     private static final String DEFAULT_DIR = "data";
     private static final String DEFAULT_FILENAME = "delivery_assignments.txt";
 
     private final String filePath;
+
+    private final DeliveryAssignmentHashMap assignments = DeliveryAssignmentHashMap.getInstance();
 
     /**
      * Creates an ExportCommand with the specified file path.
@@ -50,19 +54,34 @@ public class ExportCommand extends Command {
         }
     }
 
+    /**
+     * Checks whether the current delivery assignments are in an exportable state.
+     *
+     * @throws NotExportableException if the delivery assignments are not exportable
+     */
+    public void checkExportable() throws NotExportableException {
+        if (!isExportable()) {
+            throw new NotExportableException();
+        }
+    }
+
     @Override
     public CommandResult execute(Model model) throws CommandException {
+
         requireNonNull(model);
 
         try {
-            ExportUtil.exportAssignmentsFormatted(
-                    DeliveryAssignmentHashMap.getInstance(),
-                    filePath
-            );
+            checkExportable();
+        } catch (NotExportableException e) {
+            throw new CommandException(MESSAGE_FAILURE + " " + e.getMessage());
+        }
+
+        try {
+            ExportUtil.exportAssignmentsFormatted(assignments, filePath);
         } catch (IOException e) {
             throw new CommandException(MESSAGE_FAILURE + " " + e.getMessage());
         }
 
-        return new CommandResult(MESSAGE_SUCCESS);
+        return new CommandResult(String.format(MESSAGE_SUCCESS, filePath));
     }
 }

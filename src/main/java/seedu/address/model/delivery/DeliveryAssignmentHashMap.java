@@ -1,6 +1,5 @@
-package seedu.address.model.tag;
+package seedu.address.model.delivery;
 
-import seedu.address.model.person.Driver;
 import seedu.address.model.person.Person;
 
 import java.util.ArrayList;

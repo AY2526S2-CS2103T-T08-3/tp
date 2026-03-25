@@ -117,7 +117,7 @@ public class DeleteBoxCommand extends Command {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof DeleteCommand)) {
+        if (!(other instanceof DeleteBoxCommand)) {
             return false;
         }
 

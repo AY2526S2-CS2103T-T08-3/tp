@@ -38,6 +38,8 @@ public class DeleteBoxCommand extends Command {
             + PREFIX_BOX + "box-2";
 
     public static final String MESSAGE_DELETE_BOXES_SUCCESS = "Deleted %1$s from Person: %2$s";
+    public static final String MESSAGE_DELETE_BOXES_AND_PERSON_SUCCESS = MESSAGE_DELETE_BOXES_SUCCESS + " "
+            + "Also deleted Person: %2$s as person has no more boxes.";
     public static final String MESSAGE_PERSON_NOT_FOUND = "No subscriber with the specified name.";
     public static final String MESSAGE_BOX_NOT_FOUND = "The following box(es) do not exist under %1$s: %2$s";
 
@@ -79,6 +81,14 @@ public class DeleteBoxCommand extends Command {
         Set<Box> updatedBoxes = personToEdit.getBoxes().stream()
                 .filter(box -> !targetBoxNames.contains(box.boxName))
                 .collect(Collectors.toSet());
+
+        // if person has no more boxes upon deletion, the person gets deleted as well
+        if (updatedBoxes.isEmpty()) {
+            model.deletePerson(personToEdit);
+            model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+            return new CommandResult(String.format(MESSAGE_DELETE_BOXES_AND_PERSON_SUCCESS, targetBoxNames,
+                    personToEdit.getName()));
+        }
 
         Person editedPerson = new Person(
                 personToEdit.getName(), personToEdit.getPhone(), personToEdit.getEmail(), personToEdit.getAddress(),

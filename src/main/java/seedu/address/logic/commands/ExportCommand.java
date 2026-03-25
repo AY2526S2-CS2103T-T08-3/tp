@@ -1,15 +1,22 @@
 package seedu.address.logic.commands;
 
+import static java.util.Objects.requireNonNull;
+
+import java.io.File;
+import java.io.IOException;
+
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.delivery.DeliveryAssignmentHashMap;
 import seedu.address.model.delivery.ExportUtil;
 
-import java.io.File;
-import java.io.IOException;
-
-import static java.util.Objects.requireNonNull;
-
+/**
+ * Exports the current delivery assignments to a formatted text file.
+ * <p>
+ * Each driver will appear as a heading, followed by their assigned subscribers.
+ * If no file path is provided, the command saves the export to the default file:
+ * {@code data/delivery_assignments.txt}.
+ */
 public class ExportCommand extends Command {
 
     public static final String COMMAND_WORD = "export";
@@ -22,10 +29,13 @@ public class ExportCommand extends Command {
     private final String filePath;
 
     /**
-     * Creates an ExportCommand with a specified file path.
-     * If null or empty, uses the default path.
+     * Creates an ExportCommand with the specified file path.
+     * <p>
+     * If the provided file path is {@code null} or empty, the default path
+     * {@code data/delivery_assignments.txt} is used. The command ensures
+     * that the {@code data/} directory exists before exporting.
      *
-     * @param filePath the file path to export to
+     * @param filePath the file path to export the delivery assignments to
      */
     public ExportCommand(String filePath) {
         if (filePath == null || filePath.isBlank()) {

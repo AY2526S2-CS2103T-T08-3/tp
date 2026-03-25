@@ -1,20 +1,26 @@
 package seedu.address.model.delivery;
 
-import seedu.address.model.person.Person;
-
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+import seedu.address.model.person.Person;
+
+/**
+ * Utility class for exporting delivery assignments to a formatted text file.
+ * <p>
+ * Provides methods to write all current driver-to-person assignments into
+ * a human-readable file, grouping subscribers under each driver.
+ */
 public class ExportUtil {
 
     /**
      * Exports delivery assignments to a nicely formatted text file.
-     *
+     * <p>
      * Each driver is printed as a heading, followed by their assigned subscribers.
-     *
+     * <p>
      * @param assignments the map of drivers to assigned persons
      * @param filePath the file path to write the output to
      * @throws IOException if file writing fails

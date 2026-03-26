@@ -112,6 +112,7 @@
         "features": "Features",
         "viewing-help-help": "Viewing help : help",
         "adding-a-person-add": "Adding a person: add",
+        "adding-one-or-more-boxes-to-a-person-addbox": "Adding one or more boxes to a person: addbox",
         "listing-all-persons-list": "Listing all persons : list",
         "editing-a-person-edit": "Editing a person : edit",
         "editing-a-box-of-a-person-editbox": "Editing a box of a person : editbox",

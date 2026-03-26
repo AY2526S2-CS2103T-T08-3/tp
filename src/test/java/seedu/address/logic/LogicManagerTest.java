@@ -33,11 +33,13 @@ import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.delivery.DeliveryAssignmentHashMap;
 import seedu.address.model.person.Person;
 import seedu.address.storage.JsonAddressBookStorage;
 import seedu.address.storage.JsonUserPrefsStorage;
 import seedu.address.storage.StorageManager;
 import seedu.address.testutil.PersonBuilder;
+import seedu.address.testutil.PersonUtil;
 
 public class LogicManagerTest {
     private static final IOException DUMMY_IO_EXCEPTION = new IOException("dummy IO exception");
@@ -51,6 +53,7 @@ public class LogicManagerTest {
 
     @BeforeEach
     public void setUp() {
+        DeliveryAssignmentHashMap.clearAssignments();
         JsonAddressBookStorage addressBookStorage =
                 new JsonAddressBookStorage(temporaryFolder.resolve("addressBook.json"));
         JsonUserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(temporaryFolder.resolve("userPrefs.json"));
@@ -74,6 +77,33 @@ public class LogicManagerTest {
     public void execute_validCommand_success() throws Exception {
         String listCommand = ListCommand.COMMAND_WORD;
         assertCommandSuccess(listCommand, ListCommand.MESSAGE_SUCCESS, model);
+    }
+
+    @Test
+    public void execute_addMultipleThenFilterByDriver_success() throws Exception {
+        Person firstPerson = new PersonBuilder()
+                .withName("Alex Client")
+                .withPhone("90000001")
+                .withEmail("alex.client@example.com")
+                .withAddress("10 Alpha Road, Singapore 123456")
+                .build();
+        Person secondPerson = new PersonBuilder()
+                .withName("Blair Client")
+                .withPhone("90000002")
+                .withEmail("blair.client@example.com")
+                .withAddress("20 Beta Road, Singapore 654321")
+                .build();
+
+        logic.execute(PersonUtil.getAddCommand(firstPerson));
+        logic.execute(PersonUtil.getAddCommand(secondPerson));
+        logic.execute("assign n/Alex Tan p/91234567");
+
+        CommandResult result = logic.execute("filter d/Alex");
+
+        assertEquals(String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, 2), result.getFeedbackToUser());
+        assertEquals(2, logic.getFilteredPersonList().size());
+        assertEquals(firstPerson.getName(), logic.getFilteredPersonList().get(0).getName());
+        assertEquals(secondPerson.getName(), logic.getFilteredPersonList().get(1).getName());
     }
 
     @Test

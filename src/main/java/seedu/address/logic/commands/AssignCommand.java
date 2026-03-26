@@ -114,11 +114,14 @@ public class AssignCommand extends Command {
         // Add driverTag to tags
         tagsCopy.add(driverTag);
 
-        assignments.assign(assignedDriver, personToAssign);
-
-        return new Person(nameCopy, phoneCopy, emailCopy, addressCopy,
+        Person assignedPerson = new Person(nameCopy, phoneCopy, emailCopy, addressCopy,
                 boxesCopy, remarkCopy, expiryCopy,
                 statusCopy, tagsCopy);
+
+        // Keep the assignment store in sync with the updated Person instance in the model.
+        assignments.assign(assignedDriver, assignedPerson);
+
+        return assignedPerson;
     }
 
     /**

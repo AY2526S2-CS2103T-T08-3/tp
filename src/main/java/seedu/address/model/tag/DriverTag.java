@@ -10,7 +10,7 @@ public class DriverTag extends Tag {
      * @param tag
      */
     public DriverTag(String tag) {
-        super(tag);
+        super("DRIVER: " + tag);
     }
 
 }

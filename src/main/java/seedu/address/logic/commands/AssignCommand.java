@@ -3,7 +3,6 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
@@ -11,7 +10,6 @@ import java.util.Set;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.commands.exceptions.CommandException;
-import seedu.address.model.delivery.Driver;
 import seedu.address.model.Model;
 import seedu.address.model.delivery.DeliveryAssignmentHashMap;
 import seedu.address.model.delivery.Driver;
@@ -24,6 +22,7 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Remark;
+import seedu.address.model.tag.DriverTag;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.util.ClusterUtil;
 
@@ -107,10 +106,13 @@ public class AssignCommand extends Command {
         Remark remarkCopy = personToAssign.getRemark();
         Set<Tag> tagsCopy = new HashSet<>(personToAssign.getTags()); // have modifiable tags
         ExpiryDate expiryCopy = personToAssign.getExpiryDate();
-        Tag driverTag = new Tag(assignedDriver.getName() + ":" + assignedDriver.getPhone());
+        DriverTag driverTag = new DriverTag(assignedDriver.getName() + ":" + assignedDriver.getPhone());
 
-        // Add driverTag to tags
+
         // TODO: Possibly have a specific UI to differentiate driver tags
+        // Negate prior assignments
+        removeExistingDriverTag(tagsCopy);
+        // Add driverTag to tags
         tagsCopy.add(driverTag);
 
         assignments.assign(assignedDriver, personToAssign);
@@ -118,6 +120,14 @@ public class AssignCommand extends Command {
         return new Person(nameCopy, phoneCopy, emailCopy, addressCopy,
                 boxesCopy, remarkCopy, expiryCopy,
                 statusCopy, tagsCopy);
+    }
+
+    /**
+     * Finds and removes any {@code DriverTag} in given set of tags
+     * @param tags
+     */
+    private void removeExistingDriverTag(Set<Tag> tags) {
+        tags.removeIf(tag -> tag.tagName.contains("DRIVER: "));
     }
 
     @Override

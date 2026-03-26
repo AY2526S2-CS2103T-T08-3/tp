@@ -1,6 +1,9 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_BOX;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EXPIRY_DATE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
 
 import java.util.HashSet;
 import java.util.List;
@@ -28,7 +31,18 @@ public class AddBoxCommand extends Command {
 
     public static final String COMMAND_WORD = "addbox";
 
-    public static final String MESSAGE_USAGE = "";
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds one or more boxes with a fixed expiry date to "
+            + "the person identified by the name used in the displayed person list.\n"
+            + "Parameters: "
+            + PREFIX_NAME + "NAME "
+            + PREFIX_BOX + "BOX_NAME "
+            + "[" + PREFIX_BOX + "BOX_NAME]... "
+            + PREFIX_EXPIRY_DATE + "EXPIRY_DATE\n"
+            + "Example: " + COMMAND_WORD + " "
+            + PREFIX_NAME + "John Doe "
+            + PREFIX_BOX + "box-1 "
+            + PREFIX_BOX + "box-2 "
+            + PREFIX_EXPIRY_DATE + "2026-01-01";
 
     public static final String MESSAGE_SUCCESS = "Added %1$s to Person: %2$s";
     public static final String MESSAGE_EXISTING_BOX_NAME = "One or more of the box names added already exists under "

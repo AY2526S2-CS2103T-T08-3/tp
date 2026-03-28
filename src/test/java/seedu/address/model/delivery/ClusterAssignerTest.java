@@ -1,4 +1,4 @@
-package seedu.address.model.util;
+package seedu.address.model.delivery;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -10,90 +10,9 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.model.person.Person;
-import seedu.address.testutil.PersonBuilder;
 import seedu.address.testutil.TypicalPersons;
 
 public class ClusterAssignerTest {
-
-    @Test
-    public void getPostalCodeStringFromAddress_validAddress_returnsPostalCode() {
-        String address = "Blk 123 Sengkang Street 11, Singapore 123456";
-        assertEquals("123456", ClusterAssigner.getPostalCodeStringFromAddress(address));
-    }
-
-    @Test
-    public void getPostalCodeStringFromAddress_addressWithoutPostalCode_throwsException() {
-        String address = "Blk 123, Singapore";
-        assertThrows(IllegalStateException.class, () ->
-                ClusterAssigner.getPostalCodeStringFromAddress(address));
-    }
-
-    @Test
-    public void getPostalCodeStringFromAddress_nullAddress_throwsException() {
-        assertThrows(NullPointerException.class, () ->
-                ClusterAssigner.getPostalCodeStringFromAddress(null));
-    }
-
-    @Test
-    public void getPostalCodeIntegerFromAddress_validAddress_returnsPostalCodeAsInt() {
-        String address = "Blk 123, Singapore 123456";
-        assertEquals(123456, ClusterAssigner.getPostalCodeIntegerFromAddress(address));
-    }
-
-    @Test
-    public void getPostalCodeIntegerFromAddress_addressWithoutPostalCode_throwsException() {
-        String address = "Blk 123, Singapore";
-        assertThrows(IllegalStateException.class, () ->
-                ClusterAssigner.getPostalCodeIntegerFromAddress(address));
-    }
-
-    @Test
-    public void getPostalCodeIntegerFromAddress_nullAddress_throwsException() {
-        assertThrows(NullPointerException.class, () ->
-                ClusterAssigner.getPostalCodeIntegerFromAddress(null));
-    }
-
-    @Test
-    public void getPostalPrefixFromAddress_validAddress_returnsPrefix() {
-        String address = "Blk 123, Singapore 123456";
-        assertEquals(12, ClusterAssigner.getPostalPrefixFromAddress(address));
-    }
-
-    @Test
-    public void getPostalPrefixFromAddress_postalCodeWithLeadingZeros_returnsPrefix() {
-        String address = "Blk 123, Singapore 012345";
-        assertEquals(1, ClusterAssigner.getPostalPrefixFromAddress(address));
-    }
-
-    @Test
-    public void getPostalPrefixFromAddress_shortPostalCode_throwsException() {
-        String address = "Blk 123, Singapore 12345";
-        assertThrows(IllegalStateException.class, () ->
-                ClusterAssigner.getPostalPrefixFromAddress(address));
-    }
-
-    @Test
-    public void getPostalPrefixFromPerson_typicalPerson_returnsPrefix() {
-        assertEquals(12, ClusterAssigner.getPostalPrefixFromPerson(TypicalPersons.ALICE));
-
-        assertEquals(54, ClusterAssigner.getPostalPrefixFromPerson(TypicalPersons.BENSON));
-
-        assertEquals(11, ClusterAssigner.getPostalPrefixFromPerson(TypicalPersons.CARL));
-    }
-
-    @Test
-    public void getPostalPrefixFromPerson_nullPerson_throwsException() {
-        assertThrows(NullPointerException.class, () ->
-                ClusterAssigner.getPostalPrefixFromPerson(null));
-    }
-
-    @Test
-    public void getPostalPrefixFromPerson_personWithInvalidAddress_throwsException() {
-        assertThrows(IllegalArgumentException.class, () -> {
-            Person person = new PersonBuilder().withAddress("Sengkang").build();
-            ClusterAssigner.getPostalPrefixFromPerson(person);
-        });
-    }
 
     @Test
     public void groupIntoClusters_validInput_returnsCorrectNumberOfGroups() {
@@ -120,13 +39,13 @@ public class ClusterAssignerTest {
         List<List<Person>> clusters = ClusterAssigner.groupIntoClusters(persons, 1);
         List<Person> groupedPersons = clusters.get(0);
 
-        assertEquals(1, ClusterAssigner.getPostalPrefixFromPerson(groupedPersons.get(0)));
-        assertEquals(11, ClusterAssigner.getPostalPrefixFromPerson(groupedPersons.get(1)));
-        assertEquals(12, ClusterAssigner.getPostalPrefixFromPerson(groupedPersons.get(2)));
-        assertEquals(54, ClusterAssigner.getPostalPrefixFromPerson(groupedPersons.get(3)));
-        assertEquals(64, ClusterAssigner.getPostalPrefixFromPerson(groupedPersons.get(4)));
-        assertEquals(65, ClusterAssigner.getPostalPrefixFromPerson(groupedPersons.get(5)));
-        assertEquals(74, ClusterAssigner.getPostalPrefixFromPerson(groupedPersons.get(6)));
+        assertEquals(1, groupedPersons.get(0).getPostalPrefix());
+        assertEquals(11, groupedPersons.get(1).getPostalPrefix());
+        assertEquals(12, groupedPersons.get(2).getPostalPrefix());
+        assertEquals(54, groupedPersons.get(3).getPostalPrefix());
+        assertEquals(64, groupedPersons.get(4).getPostalPrefix());
+        assertEquals(65, groupedPersons.get(5).getPostalPrefix());
+        assertEquals(74, groupedPersons.get(6).getPostalPrefix());
 
     }
 

@@ -86,7 +86,7 @@ public class AssignCommand extends Command {
         for (int i = 0; i < sortedSubscribers.size(); i++) {
             Driver assignedDriver = drivers[i];
             for (Person personInSameCluster : sortedSubscribers.get(i)) {
-                Person assignedPerson = assignDriver(personInSameCluster, assignedDriver);
+                Person assignedPerson = createPersonWithDriver(personInSameCluster, assignedDriver);
                 model.setPerson(personInSameCluster, assignedPerson);
             }
         }
@@ -102,7 +102,7 @@ public class AssignCommand extends Command {
      * @param assignedDriver
      * @return Person with new {@code Driver} assigned
      */
-    private Person assignDriver(Person personToAssign, Driver assignedDriver) {
+    private Person createPersonWithDriver(Person personToAssign, Driver assignedDriver) {
         Name nameCopy = personToAssign.getName();
         Phone phoneCopy = personToAssign.getPhone();
         Email emailCopy = personToAssign.getEmail();

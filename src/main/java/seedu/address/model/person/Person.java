@@ -8,6 +8,7 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
 
+import javafx.beans.binding.ObjectExpression;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.delivery.Driver;
 import seedu.address.model.tag.Tag;
@@ -157,6 +158,10 @@ public class Person {
      */
     public Driver getAssignedDriver() {
         return assignedDriver;
+    }
+
+    public boolean hasDriver() {
+        return !Objects.isNull(this.assignedDriver);
     }
 
     /**

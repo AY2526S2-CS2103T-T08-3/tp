@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
+import seedu.address.model.delivery.Driver;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Box;
 import seedu.address.model.person.DeliveryStatus;
@@ -36,6 +37,7 @@ class JsonAdaptedPerson {
     private final String remark;
     private final String expiryDate;
     private final String deliveryStatus;
+    private final JsonAdaptedDriver driver; // optional
     private final List<JsonAdaptedBox> boxes;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
 
@@ -51,6 +53,7 @@ class JsonAdaptedPerson {
             @JsonProperty("remark") String remark,
             @JsonProperty("expiryDate") String expiryDate,
             @JsonProperty("deliveryStatus") String deliveryStatus,
+            @JsonProperty("driver") JsonAdaptedDriver driver,
             @JsonProperty("boxes") List<JsonAdaptedBox> boxes) {
 
 
@@ -61,10 +64,24 @@ class JsonAdaptedPerson {
         this.remark = remark;
         this.expiryDate = expiryDate;
         this.deliveryStatus = deliveryStatus;
+        this.driver = driver;
         this.boxes = boxes;
         if (tags != null) {
             this.tags.addAll(tags);
         }
+    }
+
+    // Overloaded constructor for tests
+    public JsonAdaptedPerson(String name,
+                             String phone,
+                             String email,
+                             String address,
+                             List<JsonAdaptedTag> tags,
+                             String remark,
+                             String expiryDate,
+                             String deliveryStatus,
+                             List<JsonAdaptedBox> boxes) {
+        this(name, phone, email, address, tags, remark, expiryDate, deliveryStatus, null, boxes);
     }
 
     /**
@@ -78,6 +95,7 @@ class JsonAdaptedPerson {
         remark = source.getRemark().value;
         expiryDate = source.getExpiryDate().value;
         deliveryStatus = source.getDeliveryStatus().toString();
+        driver = source.hasDriver() ? new JsonAdaptedDriver(source.getAssignedDriver()) : null;
         boxes = source.getBoxes().stream()
                 .map(JsonAdaptedBox::new)
                 .collect(Collectors.toList());
@@ -169,7 +187,13 @@ class JsonAdaptedPerson {
 
         final Set<Box> modelBoxes = new TreeSet<>(personBoxes);
         final Set<Tag> modelTags = new HashSet<>(personTags);
-        return new Person(modelName, modelPhone, modelEmail, modelAddress, modelBoxes,
+        Person p = new Person(modelName, modelPhone, modelEmail, modelAddress, modelBoxes,
                 modelRemark, modelExpiryDate, modelDeliveryStatus, modelTags);
+        if (driver != null) {
+            Driver modelDriver = driver.toModelType();
+            p.assignDriver(modelDriver);
+        }
+
+        return p;
     }
 }

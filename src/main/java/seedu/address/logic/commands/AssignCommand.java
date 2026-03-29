@@ -22,7 +22,6 @@ import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
 import seedu.address.model.person.Remark;
-import seedu.address.model.tag.DriverTag;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.util.ClusterUtil;
 
@@ -89,7 +88,6 @@ public class AssignCommand extends Command {
             for (Person personInSameCluster : sortedSubscribers.get(i)) {
                 Person assignedPerson = assignDriver(personInSameCluster, assignedDriver);
                 model.setPerson(personInSameCluster, assignedPerson);
-                // TODO: Update partitioned list in AddressBook store for export/filter command
             }
         }
 
@@ -98,6 +96,12 @@ public class AssignCommand extends Command {
 
     }
 
+    /**
+     * Creates a copy of the input Person but with a new Driver
+     * @param personToAssign
+     * @param assignedDriver
+     * @return Person with new {@code Driver} assigned
+     */
     private Person assignDriver(Person personToAssign, Driver assignedDriver) {
         Name nameCopy = personToAssign.getName();
         Phone phoneCopy = personToAssign.getPhone();
@@ -119,14 +123,6 @@ public class AssignCommand extends Command {
         assignments.assign(assignedDriver, assignedPerson);
 
         return assignedPerson;
-    }
-
-    /**
-     * Finds and removes any {@code DriverTag} in given set of tags
-     * @param tags
-     */
-    private void removeExistingDriverTag(Set<Tag> tags) {
-        tags.removeIf(tag -> tag.tagName.contains("DRIVER: "));
     }
 
     @Override

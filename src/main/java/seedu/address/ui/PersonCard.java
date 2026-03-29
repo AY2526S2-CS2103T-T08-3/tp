@@ -85,17 +85,7 @@ public class PersonCard extends UiPart<Region> {
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> {
                     Label tagLabel = new Label(tag.tagName);
-                    if (tag.tagName.startsWith("DRIVER:")) {
-                        Image driverImage = new Image(getClass().getResourceAsStream("/images/driver_icon.png"));
-                        ImageView driverIcon = new ImageView(driverImage);
-                        driverIcon.setFitWidth(16);
-                        driverIcon.setFitHeight(16);
-                        tagLabel.setGraphic(driverIcon);
-                        tagLabel.setGraphicTextGap(2);
-                        tagLabel.getStyleClass().add("driver-tag");
-                    } else {
-                        tagLabel.getStyleClass().add("tag");
-                    }
+                    tagLabel.getStyleClass().add("tag");
                     tags.getChildren().add(tagLabel);
                 });
 

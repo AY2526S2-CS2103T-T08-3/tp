@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import seedu.address.commons.exceptions.IllegalValueException;
-import seedu.address.model.delivery.Driver;
 import seedu.address.model.commons.name.Name;
 import seedu.address.model.commons.phone.Phone;
+import seedu.address.model.delivery.Driver;
 
 /**
  * Jackson-friendly version of {@link Driver}.

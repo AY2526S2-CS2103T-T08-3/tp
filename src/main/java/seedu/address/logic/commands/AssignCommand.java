@@ -11,6 +11,8 @@ import java.util.Set;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
+import seedu.address.model.commons.name.Name;
+import seedu.address.model.commons.phone.Phone;
 import seedu.address.model.delivery.DeliveryAssignmentHashMap;
 import seedu.address.model.delivery.Driver;
 import seedu.address.model.person.Address;
@@ -18,9 +20,7 @@ import seedu.address.model.person.Box;
 import seedu.address.model.person.DeliveryStatus;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.ExpiryDate;
-import seedu.address.model.person.Name;
 import seedu.address.model.person.Person;
-import seedu.address.model.person.Phone;
 import seedu.address.model.person.Remark;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.util.ClusterUtil;
@@ -80,7 +80,7 @@ public class AssignCommand extends Command {
                     drivers.length);
 
         if (sortedSubscribers.size() != drivers.length) {
-            // Algorithm wrong
+            // End here is algorithm is wrong (mapped to wrong no. of drivers)
             return new CommandResult(MESSAGE_FAIL);
         }
         for (int i = 0; i < sortedSubscribers.size(); i++) {

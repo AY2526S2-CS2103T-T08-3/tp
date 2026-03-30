@@ -175,9 +175,8 @@ Format: `find KEYWORD [MORE_KEYWORDS]`
   e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
 
 Examples:
-* `find John` returns `john` and `John Doe`
-* `find alex david` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
+* `find John` returns `John Doe` and `John Ching`
+  ![result for 'find alex david'](images/findJohnResult.png)
 
 ### Deleting a person : `delete`
 
@@ -340,13 +339,14 @@ _Details coming soon ..._
 | **Add**        | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS b/BOX [o/REMARK] ex/EXPIRY_DATE [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 123465 b/box-1 ex/2026-12-31 t/friend` |
 | **Clear**      | `clear`                                                                                                                                                                                                    |
 | **Delete**     | `delete INDEX` or `delete EMAIL`<br> e.g., `delete 3` `delete test@example.com`                                                                                                                            |
-| **Edit**       | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [b/BOX] [o/REMARK] [ex/EXPIRY_DATE] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee o/prefers morning delivery`                                        |
+| **Edit**       | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [b/BOX] [o/REMARK] [ex/EXPIRY_DATE] [t/TAG]…​`<br> e.g., `edit 2 n/James Lee o/prefers morning delivery`                                        |
 | **Find**       | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`                                                                                                                                                 |
+| **Filter**     | `filter [b/BOX_TYPE] [d/DRIVER_NAME]`<br> e.g., `filter d/Alex` or `filter b/Vegetable d/Alex`                                                                                                            |
 | **Mark**       | `mark INDEX STATUS`<br> e.g., `mark 1 delivered`                                                                                                                                                           |
 | **Remark**     | `remark INDEX REMARK`<br> e.g., `remark 2 allergic to peanuts`                                                                                                                                             |
 | **Assign**     | `assign n/NAME p/PHONE_NUMBER [n/NAME] [p/PHONE_NUMBER]…`<br> e.g., `assign n/John Doe p/91234567 n/Jane Tan p/98765432`                                                                                   |
 | **List**       | `list`                                                                                                                                                                                                     |
 | **Add Box**    | `addbox n/NAME b/BOX [b/BOX_NAME]… ex/EXPIRY_DATE` <br> e.g., `addbox n/Amy b/box-1 b/box-2 ex/2026-12-31…​`                                                                                               |
-| **Edit Box**   | `edit n/NAME b/BOX_NAME [nb/NEW_BOX_NAME] [ex/EXPIRY_DATE]` <br> e.g., `editbox n/Amy b/box-1 nb/box-2 ex/2026-12-31`                                                                                      |
+| **Edit Box**   | `editbox n/NAME b/BOX_NAME [nb/NEW_BOX_NAME] [ex/EXPIRY_DATE]` <br> e.g., `editbox n/Amy b/box-1 nb/box-2 ex/2026-12-31`                                                                                  |
 | **Delete Box** | `deletebox n/NAME b/BOX_NAME [b/BOX_NAME]…` <br> e.g., `deletebox n/Amy b/box-1 b/box-2`                                                                                                                   |
 | **Help**       | `help`                                                                                                                                                                                                     |

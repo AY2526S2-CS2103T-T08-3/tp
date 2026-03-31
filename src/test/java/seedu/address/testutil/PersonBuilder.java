@@ -6,6 +6,7 @@ import java.util.TreeSet;
 
 import seedu.address.model.commons.name.Name;
 import seedu.address.model.commons.phone.Phone;
+import seedu.address.model.delivery.Driver;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Box;
 import seedu.address.model.person.DeliveryStatus;
@@ -35,6 +36,7 @@ public class PersonBuilder {
     private DeliveryStatus deliveryStatus;
     private Set<Tag> tags;
     private Set<Box> boxes;
+    private Driver assignedDriver;
 
     /**
      * Creates a {@code PersonBuilder} with the default details.
@@ -48,6 +50,7 @@ public class PersonBuilder {
         deliveryStatus = DeliveryStatus.fromString(DEFAULT_DELIVERY_STATUS);
         tags = new HashSet<>();
         boxes = SampleDataUtil.getBoxSet("box-1:2026-12-31");
+        assignedDriver = null;
     }
 
     /**
@@ -62,6 +65,7 @@ public class PersonBuilder {
         deliveryStatus = personToCopy.getDeliveryStatus();
         tags = new HashSet<>(personToCopy.getTags());
         boxes = new TreeSet<>(personToCopy.getBoxes());
+        assignedDriver = personToCopy.hasDriver() ? personToCopy.getAssignedDriver() : null;
     }
 
     /**
@@ -128,7 +132,22 @@ public class PersonBuilder {
         return this;
     }
 
+    /**
+     * Sets the assigned {@code Driver} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withDriver(String name, String phone) {
+        this.assignedDriver = new Driver(new Name(name), new Phone(phone));
+        return this;
+    }
+
+    /**
+     * Returns a {@code Person} built from the current builder state.
+     */
     public Person build() {
+        if (assignedDriver != null) {
+            return new Person(name, phone, email, address, boxes, remark,
+                    deliveryStatus, tags, assignedDriver);
+        }
         return new Person(name, phone, email, address, boxes, remark, deliveryStatus, tags);
     }
 

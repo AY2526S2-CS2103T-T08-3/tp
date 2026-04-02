@@ -45,6 +45,8 @@ public class PersonCard extends UiPart<Region> {
     @FXML
     private Label email;
     @FXML
+    private Label remarkTitle;
+    @FXML
     private Label remark;
     @FXML
     private Label deliveryStatus;
@@ -76,7 +78,8 @@ public class PersonCard extends UiPart<Region> {
         address.setGraphicTextGap(2);
         address.setText(person.getAddress().value);
         email.setText(person.getEmail().value);
-        remark.setText("Remark: " + person.getRemark().value);
+        remarkTitle.setText("Remarks");
+        remark.setText(person.getRemark().value);
         deliveryStatus.setText(person.getDeliveryStatus().deliveryStatus);
         person.getBoxes().stream()
                 .sorted()

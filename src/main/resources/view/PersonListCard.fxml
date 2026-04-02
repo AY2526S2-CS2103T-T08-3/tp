@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.ColumnConstraints?>
@@ -34,9 +35,9 @@
         <FlowPane fx:id="tags" />
         <FlowPane fx:id="boxes" prefWrapLength="500.0" />
       </VBox>
-         <HBox prefHeight="60.0" prefWidth="200.0">
+         <HBox alignment="CENTER_LEFT" prefWidth="200.0">
             <children>
-               <VBox prefHeight="200.0" prefWidth="100.0">
+               <VBox alignment="CENTER_LEFT" prefWidth="100.0" spacing="2.0">
                   <children>
                   <Label fx:id="email" styleClass="cell_small_label" text="\$email" />
                   <Label fx:id="phone" styleClass="cell_small_label" text="\$phone" />
@@ -44,9 +45,14 @@
                   </children>
                </VBox>
                <Region maxWidth="-Infinity" prefWidth="30.0" HBox.hgrow="ALWAYS" />
-               <VBox prefHeight="200.0" prefWidth="100.0">
+               <VBox prefWidth="100.0">
                   <children>
-                  <Label fx:id="remark" styleClass="cell_small_label" text="\$remark" />
+                     <Label fx:id="remarkTitle" styleClass="remark-title" text="\$remarkTitle" />
+                  <Label fx:id="remark" minHeight="-Infinity" prefHeight="90.0" text="\$remark" wrapText="true">
+                        <styleClass>
+                           <String fx:value="cell_small_label" />
+                           <String fx:value="remark-box" />
+                        </styleClass></Label>
                   </children>
                </VBox>
             </children>

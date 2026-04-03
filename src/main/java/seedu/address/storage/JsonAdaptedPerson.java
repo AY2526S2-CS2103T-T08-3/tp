@@ -18,7 +18,6 @@ import seedu.address.model.person.Address;
 import seedu.address.model.person.Box;
 import seedu.address.model.person.DeliveryStatus;
 import seedu.address.model.person.Email;
-import seedu.address.model.person.ExpiryDate;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Remark;
 import seedu.address.model.tag.Tag;
@@ -35,7 +34,6 @@ class JsonAdaptedPerson {
     private final String email;
     private final String address;
     private final String remark;
-    private final String expiryDate;
     private final String deliveryStatus;
     private final JsonAdaptedDriver driver; // optional
     private final List<JsonAdaptedBox> boxes;
@@ -51,9 +49,8 @@ class JsonAdaptedPerson {
             @JsonProperty("address") String address,
             @JsonProperty("tags") List<JsonAdaptedTag> tags,
             @JsonProperty("remark") String remark,
-            @JsonProperty("expiryDate") String expiryDate,
-            @JsonProperty("driver") JsonAdaptedDriver driver,
             @JsonProperty("deliveryStatus") String deliveryStatus,
+            @JsonProperty("driver") JsonAdaptedDriver driver,
             @JsonProperty("boxes") List<JsonAdaptedBox> boxes) {
 
 
@@ -62,7 +59,6 @@ class JsonAdaptedPerson {
         this.email = email;
         this.address = address;
         this.remark = remark;
-        this.expiryDate = expiryDate;
         this.deliveryStatus = deliveryStatus;
         this.driver = driver;
         this.boxes = boxes;
@@ -80,7 +76,6 @@ class JsonAdaptedPerson {
         email = source.getEmail().value;
         address = source.getAddress().value;
         remark = source.getRemark().value;
-        expiryDate = source.getExpiryDate().value;
         deliveryStatus = source.getDeliveryStatus().toString();
         driver = source.hasDriver() ? new JsonAdaptedDriver(source.getAssignedDriver()) : null;
         boxes = source.getBoxes().stream()
@@ -134,15 +129,6 @@ class JsonAdaptedPerson {
         }
         final Address modelAddress = new Address(address);
 
-        if (expiryDate == null) {
-            throw new IllegalValueException(String.format(MISSING_FIELD_MESSAGE_FORMAT,
-                    ExpiryDate.class.getSimpleName()));
-        }
-        if (!ExpiryDate.isValidExpiryDate(expiryDate)) {
-            throw new IllegalValueException(ExpiryDate.MESSAGE_CONSTRAINTS);
-        }
-        final ExpiryDate modelExpiryDate = new ExpiryDate(expiryDate);
-
         if (remark == null) {
             throw new IllegalValueException(
                     String.format(MISSING_FIELD_MESSAGE_FORMAT, Remark.class.getSimpleName()));
@@ -183,7 +169,7 @@ class JsonAdaptedPerson {
         final Set<Tag> modelTags = new HashSet<>(personTags);
 
         return new Person(modelName, modelPhone, modelEmail, modelAddress, modelBoxes,
-                modelRemark, modelExpiryDate, modelDeliveryStatus, modelTags, modelDriver);
+                modelRemark, modelDeliveryStatus, modelTags, modelDriver);
     }
 }
 

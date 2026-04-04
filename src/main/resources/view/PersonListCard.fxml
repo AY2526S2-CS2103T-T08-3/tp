@@ -32,24 +32,28 @@
          <Label fx:id="deliveryStatus" styleClass="delivery-status-label" text="\$deliveryStatus" />
       </HBox>
       <VBox spacing="5.0">
-      <VBox spacing="1">
-        <Label fx:id="driver" styleClass="cell_small_label" text="\$driver" />
+        <Label fx:id="driver" styleClass="driver-card" text="\$driver" />
         <FlowPane fx:id="tags" />
         <FlowPane fx:id="boxes" prefWrapLength="500.0" />
       </VBox>
-         <HBox alignment="CENTER_LEFT" prefWidth="200.0">
+         <HBox alignment="CENTER_LEFT" prefWidth="600.0">
             <children>
-               <VBox alignment="CENTER_LEFT" prefWidth="100.0" spacing="2.0">
+               <VBox>
                   <children>
-                  <Label fx:id="email" styleClass="cell_small_label" text="\$email" />
-                  <Label fx:id="phone" styleClass="cell_small_label" text="\$phone" />
-                  <Label fx:id="address" styleClass="cell_small_label" text="\$address" />
+                     <Label fx:id="detailsTitle" styleClass="details_title" text="\$detailsTitle" />
+                     <VBox alignment="CENTER_LEFT" fillWidth="false" prefHeight="90.0" spacing="2.0" styleClass="details_box">
+                        <children>
+                        <Label fx:id="email" styleClass="cell_small_label" text="\$email" />
+                        <Label fx:id="phone" styleClass="cell_small_label" text="\$phone" />
+                        <Label fx:id="address" styleClass="cell_small_label" text="\$address" />
+                        </children>
+                     </VBox>
                   </children>
                </VBox>
                <Region maxWidth="-Infinity" prefWidth="30.0" HBox.hgrow="ALWAYS" />
                <VBox prefWidth="100.0">
                   <children>
-                     <Label fx:id="remarkTitle" styleClass="remark-title" text="\$remarkTitle" />
+                     <Label fx:id="remarkTitle" styleClass="remark_title" text="\$remarkTitle" />
                   <Label fx:id="remark" minHeight="-Infinity" prefHeight="90.0" text="\$remark" wrapText="true">
                         <styleClass>
                            <String fx:value="cell_small_label" />

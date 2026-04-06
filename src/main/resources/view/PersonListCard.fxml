@@ -32,8 +32,10 @@
          <Label fx:id="deliveryStatus" styleClass="delivery-status-label" text="\$deliveryStatus" />
       </HBox>
       <VBox spacing="5.0">
-        <Label fx:id="driver" styleClass="driver-card" text="\$driver" />
-        <FlowPane fx:id="tags" />
+        <FlowPane fx:id="tags">
+               <children>
+              <Label fx:id="driver" styleClass="cell_small_label" text="\$driver" />
+               </children></FlowPane>
         <FlowPane fx:id="boxes" prefWrapLength="500.0" />
       </VBox>
          <HBox alignment="CENTER_LEFT" prefWidth="600.0">

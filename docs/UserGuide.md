@@ -79,16 +79,16 @@ Managing recurring orders in a spreadsheet gets messy fast — you lose track of
    - [Command Format Notes](#notes-about-the-command-format)
    - [Viewing help — `help`](#viewing-help--help)
    - [Adding a subscriber — `add`](#adding-a-subscriber--add)
-   - [Adding boxes — `addbox`](#adding-one-or-more-boxes-to-a-subscriber--addbox)
    - [Listing all subscribers — `list`](#listing-all-subscribers--list)
    - [Editing a subscriber — `edit`](#editing-a-subscriber--edit)
-   - [Editing a box — `editbox`](#editing-a-box--editbox)
    - [Updating a remark — `remark`](#updating-a-subscribers-remark--remark)
    - [Finding subscribers — `find`](#finding-subscribers--find)
    - [Deleting a subscriber — `delete`](#deleting-a-subscriber--delete)
-   - [Deleting boxes — `deletebox`](#deleting-boxes--deletebox)
    - [Marking delivery status — `mark`](#marking-delivery-status--mark)
    - [Filtering subscribers — `filter`](#filtering-subscribers--filter)
+   - [Adding boxes — `addbox`](#adding-one-or-more-boxes-to-a-subscriber--addbox)
+   - [Editing a box — `editbox`](#editing-a-box--editbox)
+   - [Deleting boxes — `deletebox`](#deleting-boxes--deletebox)
    - [Assigning drivers — `assign`](#assigning-drivers--assign)
    - [Exporting assignments — `export`](#exporting-driver-delivery-assignments--export)
    - [Clearing all entries — `clear`](#clearing-all-entries--clear)
@@ -280,26 +280,6 @@ Examples:
 
 ---
 
-### Adding one or more boxes to a subscriber : `addbox`
-
-Adds one or more boxes to an existing subscriber.
-
-Format: `addbox n/NAME b/BOX_NAME [b/BOX_NAME]... ex/EXPIRY_DATE`
-
-* The subscriber is identified by their exact `NAME`.
-* The expiry date applies to all boxes added in the same command.
-* See also: [`add`](#adding-a-subscriber--add) to add boxes when first creating a subscriber.
-
-> **Tip:** Use this command when a subscriber renews or upgrades their order mid-cycle without changing their other details.
-
-Examples:
-* `addbox n/Sarah Tan b/box-3 ex/2026-03-31` — adds one new box to Sarah Tan.
-* `addbox n/Wei Ming b/box-3 b/box-4 ex/2026-04-30` — adds two boxes to Wei Ming, both expiring 2026-04-30.
-
-**Expected output:** The output panel confirms the boxes have been added and shows the subscriber's updated details.
-
----
-
 ### Listing all subscribers : `list`
 
 Shows all subscribers currently in Client2Door.
@@ -332,28 +312,6 @@ Examples:
 **Expected output:** The output panel confirms the edit and shows the subscriber's updated details.
 
 ![Edit command result](../docs/images/Release1.3Edit.png)
-
----
-
-### Editing a box : `editbox`
-
-Edits the name or expiry date of an existing box belonging to a subscriber.
-
-Format: `editbox n/NAME b/BOX_NAME [nb/NEW_BOX_NAME] [ex/EXPIRY_DATE]`
-
-* The subscriber is identified by their exact `NAME`.
-* `b/BOX_NAME` identifies which box to edit.
-* At least one of `nb/` or `ex/` must be provided.
-* See also: [`addbox`](#adding-one-or-more-boxes-to-a-subscriber--addbox) to add new boxes, [`deletebox`](#deleting-boxes--deletebox) to remove boxes.
-
-Examples:
-* `editbox n/Sarah Tan b/box-1 nb/box-2` — renames the box.
-* `editbox n/Sarah Tan b/box-2 ex/2026-03-31` — extends the expiry date.
-* `editbox n/Wei Ming b/box-1 nb/box-3 ex/2026-02-28` — renames and updates expiry.
-
-**Expected output:** The output panel confirms the update and shows the box's new details.
-
-![Editbox command result](../docs/images/Release1.4-EditBox.png)
 
 ---
 
@@ -427,28 +385,6 @@ Examples:
 
 ---
 
-### Deleting boxes : `deletebox`
-
-Removes one or more boxes from a subscriber.
-
-Format: `deletebox n/NAME b/BOX_NAME [b/BOX_NAME]...`
-
-* The subscriber is identified by their exact `NAME`.
-* At least one box must be specified.
-* See also: [`addbox`](#adding-one-or-more-boxes-to-a-subscriber--addbox) to add boxes.
-
-> **Warning:** If you delete all boxes belonging to a subscriber, the subscriber will also be permanently deleted from Client2Door.
-
-Examples:
-* `deletebox n/Sarah Tan b/box-1` — removes one box from Sarah Tan.
-* `deletebox n/Wei Ming b/box-1 b/box-2` — removes two boxes. If these are Wei Ming's only boxes, Wei Ming will also be deleted.
-
-**Expected output:** The output panel confirms which boxes were removed.
-
-![Deletebox command result](../docs/images/Release1.4-DeleteBox.png)
-
----
-
 ### Marking delivery status : `mark`
 
 Updates the delivery status of a subscriber.
@@ -507,6 +443,70 @@ Before filtering by driver:
 After running `filter d/David Lim`, only that driver's subscribers are shown:
 
 ![Filter after (driver)](../docs/images/Release1.4-FilterAfterDriver.png)
+
+---
+
+### Adding one or more boxes to a subscriber : `addbox`
+
+Adds one or more boxes to an existing subscriber.
+
+Format: `addbox n/NAME b/BOX_NAME [b/BOX_NAME]... ex/EXPIRY_DATE`
+
+* The subscriber is identified by their exact `NAME`.
+* The expiry date applies to all boxes added in the same command.
+* See also: [`add`](#adding-a-subscriber--add) to add boxes when first creating a subscriber.
+
+> **Tip:** Use this command when a subscriber renews or upgrades their order mid-cycle without changing their other details.
+
+Examples:
+* `addbox n/Sarah Tan b/box-3 ex/2026-03-31` — adds one new box to Sarah Tan.
+* `addbox n/Wei Ming b/box-3 b/box-4 ex/2026-04-30` — adds two boxes to Wei Ming, both expiring 2026-04-30.
+
+**Expected output:** The output panel confirms the boxes have been added and shows the subscriber's updated details.
+
+---
+
+### Editing a box : `editbox`
+
+Edits the name or expiry date of an existing box belonging to a subscriber.
+
+Format: `editbox n/NAME b/BOX_NAME [nb/NEW_BOX_NAME] [ex/EXPIRY_DATE]`
+
+* The subscriber is identified by their exact `NAME`.
+* `b/BOX_NAME` identifies which box to edit.
+* At least one of `nb/` or `ex/` must be provided.
+* See also: [`addbox`](#adding-one-or-more-boxes-to-a-subscriber--addbox) to add new boxes, [`deletebox`](#deleting-boxes--deletebox) to remove boxes.
+
+Examples:
+* `editbox n/Sarah Tan b/box-1 nb/box-2` — renames the box.
+* `editbox n/Sarah Tan b/box-2 ex/2026-03-31` — extends the expiry date.
+* `editbox n/Wei Ming b/box-1 nb/box-3 ex/2026-02-28` — renames and updates expiry.
+
+**Expected output:** The output panel confirms the update and shows the box's new details.
+
+![Editbox command result](../docs/images/Release1.4-EditBox.png)
+
+---
+
+### Deleting boxes : `deletebox`
+
+Removes one or more boxes from a subscriber.
+
+Format: `deletebox n/NAME b/BOX_NAME [b/BOX_NAME]...`
+
+* The subscriber is identified by their exact `NAME`.
+* At least one box must be specified.
+* See also: [`addbox`](#adding-one-or-more-boxes-to-a-subscriber--addbox) to add boxes.
+
+> **Warning:** If you delete all boxes belonging to a subscriber, the subscriber will also be permanently deleted from Client2Door.
+
+Examples:
+* `deletebox n/Sarah Tan b/box-1` — removes one box from Sarah Tan.
+* `deletebox n/Wei Ming b/box-1 b/box-2` — removes two boxes. If these are Wei Ming's only boxes, Wei Ming will also be deleted.
+
+**Expected output:** The output panel confirms which boxes were removed.
+
+![Deletebox command result](../docs/images/Release1.4-DeleteBox.png)
 
 ---
 

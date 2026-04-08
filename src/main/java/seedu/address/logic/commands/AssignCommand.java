@@ -74,11 +74,18 @@ public class AssignCommand extends Command {
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
         int numOfDrivers = drivers.length;
-        List<List<Person>> sortedSubscribers = ClusterAssigner.groupIntoClusters(
-                    model.getAddressBook().getPersonList(),
-                    numOfDrivers);
 
-        int numOfExcessDrivers = numOfDrivers - model.getAddressBook().getPersonList().size();
+        // get all non-delivered persons
+        List<Person> nonDeliveredPersons = model.getAddressBook().getPersonList().stream()
+                .filter(p -> p.getDeliveryStatus() != DeliveryStatus.DELIVERED)
+                .collect(java.util.stream.Collectors.toList());
+
+        List<List<Person>> sortedSubscribers = ClusterAssigner.groupIntoClusters(
+                nonDeliveredPersons,
+                numOfDrivers);
+
+        int numOfExcessDrivers = numOfDrivers - nonDeliveredPersons.size();
+
         boolean hasExcessDrivers = numOfExcessDrivers > 0;
 
         if (sortedSubscribers.size() != drivers.length) {

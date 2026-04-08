@@ -26,7 +26,6 @@ import seedu.address.model.Model;
 import seedu.address.model.commons.name.Name;
 import seedu.address.model.commons.phone.Phone;
 import seedu.address.model.delivery.Driver;
-import seedu.address.model.delivery.exceptions.DriverNotFoundException;
 import seedu.address.model.person.Address;
 import seedu.address.model.person.Box;
 import seedu.address.model.person.DeliveryStatus;

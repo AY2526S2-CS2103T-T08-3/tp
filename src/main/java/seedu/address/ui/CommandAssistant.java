@@ -197,7 +197,7 @@ public class CommandAssistant {
         appendMissingPrefix(suggestion, argMultimap, PREFIX_NAME, " n/NAME");
         appendMissingPrefix(suggestion, argMultimap, PREFIX_BOX, " b/OLD_BOX_NAME");
         appendMissingPrefix(suggestion, argMultimap, PREFIX_NEW_BOX, " [nb/NEW_BOX_NAME]");
-        appendMissingPrefix(suggestion, argMultimap, PREFIX_EXPIRY_DATE, " [ex/EXPIRY_DATE]");
+        appendMissingPrefix(suggestion, argMultimap, PREFIX_EXPIRY_DATE, " [ex/MONTHS_SUBSCRIBED]");
         return suggestion.toString();
     }
 

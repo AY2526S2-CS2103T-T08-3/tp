@@ -79,16 +79,16 @@ Managing recurring orders in a spreadsheet gets messy fast — you lose track of
    - [Command Format Notes](#notes-about-the-command-format)
    - [Viewing help — `help`](#viewing-help--help)
    - [Adding a subscriber — `add`](#adding-a-subscriber--add)
-   - [Adding boxes — `addbox`](#adding-one-or-more-boxes-to-a-subscriber--addbox)
    - [Listing all subscribers — `list`](#listing-all-subscribers--list)
    - [Editing a subscriber — `edit`](#editing-a-subscriber--edit)
-   - [Editing a box — `editbox`](#editing-a-box--editbox)
    - [Updating a remark — `remark`](#updating-a-subscribers-remark--remark)
    - [Finding subscribers — `find`](#finding-subscribers--find)
    - [Deleting a subscriber — `delete`](#deleting-a-subscriber--delete)
-   - [Deleting boxes — `deletebox`](#deleting-boxes--deletebox)
    - [Marking delivery status — `mark`](#marking-delivery-status--mark)
    - [Filtering subscribers — `filter`](#filtering-subscribers--filter)
+   - [Adding boxes — `addbox`](#adding-one-or-more-boxes-to-a-subscriber--addbox)
+   - [Editing a box — `editbox`](#editing-a-box--editbox)
+   - [Deleting boxes — `deletebox`](#deleting-boxes--deletebox)
    - [Assigning drivers — `assign`](#assigning-drivers--assign)
    - [Exporting assignments — `export`](#exporting-driver-delivery-assignments--export)
    - [Clearing all entries — `clear`](#clearing-all-entries--clear)
@@ -149,7 +149,7 @@ If you have never used a CLI before, follow these steps to get familiar with Cli
 
 Type the following into the command box at the top and press Enter:
 ```
-add n/Tom Baker p/91234567 e/tombaker@email.com a/123 Orchard Rd Singapore 238888 b/box-1 ex/2026-01-31
+add n/Tom Baker p/91234567 e/tombaker@email.com a/123 Orchard Rd Singapore 238888 b/box-1:2
 ```
 The middle output panel will confirm the subscriber was added. Tom Baker will appear at the **bottom** of the result panel with a `Pending` delivery status and one box.
 
@@ -249,54 +249,31 @@ Format: `help`
 
 Adds a new subscriber to Client2Door.
 
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [o/REMARK] ex/EXPIRY_DATE b/BOX… [t/TAG]…`
+Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [o/REMARK] b/BOX_NAME:NUMBER_OF_MONTHS… [t/TAG]…`
 
 **Parameter reference:**
 
-| Prefix | Parameter | Description |
-|--------|-----------|-------------|
-| `n/` | `NAME` | Full name of the subscriber |
-| `p/` | `PHONE_NUMBER` | Contact number |
-| `e/` | `EMAIL` | Email address |
-| `a/` | `ADDRESS` | Delivery address |
-| `b/` | `BOX` | Box name — at least 1 required; repeat `b/` for multiple boxes |
-| `ex/` | `EXPIRY_DATE` | Subscription expiry date applied to all boxes in this command (format: `YYYY-MM-DD`) |
-| `o/` | `REMARK` | Optional delivery note — defaults to `No remark` if omitted |
-| `t/` | `TAG` | Optional tag(s) — can be repeated |
-
-> **Tip:** Add multiple boxes in one command by repeating `b/`. The same expiry date applies to all of them. You can always add more boxes later with [`addbox`](#adding-one-or-more-boxes-to-a-subscriber--addbox).
+| Prefix | Parameter                         | Description                                                                                                                                               |
+|--------|-----------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `n/`   | `NAME`                            | Full name of the subscriber                                                                                                                               |
+| `p/`   | `PHONE_NUMBER`                    | Contact number                                                                                                                                            |
+| `e/`   | `EMAIL`                           | Email address                                                                                                                                             |
+| `a/`   | `ADDRESS`                         | Delivery address                                                                                                                                          |
+| `b/`   | `BOX_NAME`<br/>`NUMBER_OF_MONTHS` | - Box name: at least 1 required; repeat `b/` for multiple boxes<br/>- Number of months: Number of months till the end of the intended subscription period |
+| `o/`   | `REMARK`                          | Optional delivery note — defaults to `No remark` if omitted                                                                                               |
+| `t/`   | `TAG`                             | Optional tag(s) — can be repeated                                                                                                                         |
 
 > **Note:** The subscriber's delivery status is automatically set to `Pending` when first added.
 
 **Important:** The expiry date applies to **all** boxes added in the same command. To set different expiry dates per box, use [`addbox`](#adding-one-or-more-boxes-to-a-subscriber--addbox) separately for each.
 
 Examples:
-* `add n/Sarah Tan p/91234567 e/sarah@email.com a/Blk 10 Ang Mo Kio Ave 4 #05-03 Singapore 560010 b/box-1 ex/2026-01-31`
-* `add n/Wei Ming p/87654321 e/weiming@email.com a/12 Toa Payoh Lor 6 Singapore 310012 b/box-1 b/box-2 o/leave at door, ring bell ex/2026-02-28 t/vip`
+* `add n/Sarah Tan p/91234567 e/sarah@email.com a/Blk 10 Ang Mo Kio Ave 4 #05-03 Singapore 560010 b/box-1:2`
+* `add n/Wei Ming p/87654321 e/weiming@email.com a/12 Toa Payoh Lor 6 Singapore 310012 b/box-1:2 b/box-2:3 o/leave at door, ring bell t/vip`
 
 **Expected output:** The subscriber appears in the result panel at the bottom, and the output panel confirms:
 
 ![Add command result](../docs/images/Release1.3Add.png)
-
----
-
-### Adding one or more boxes to a subscriber : `addbox`
-
-Adds one or more boxes to an existing subscriber.
-
-Format: `addbox n/NAME b/BOX_NAME [b/BOX_NAME]... ex/EXPIRY_DATE`
-
-* The subscriber is identified by their exact `NAME`.
-* The expiry date applies to all boxes added in the same command.
-* See also: [`add`](#adding-a-subscriber--add) to add boxes when first creating a subscriber.
-
-> **Tip:** Use this command when a subscriber renews or upgrades their order mid-cycle without changing their other details.
-
-Examples:
-* `addbox n/Sarah Tan b/box-3 ex/2026-03-31` — adds one new box to Sarah Tan.
-* `addbox n/Wei Ming b/box-3 b/box-4 ex/2026-04-30` — adds two boxes to Wei Ming, both expiring 2026-04-30.
-
-**Expected output:** The output panel confirms the boxes have been added and shows the subscriber's updated details.
 
 ---
 
@@ -316,7 +293,7 @@ Format: `list`
 
 Edits the details of an existing subscriber.
 
-Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [o/REMARK] [ex/EXPIRY_DATE] [t/TAG]…`
+Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [o/REMARK] [t/TAG]…`
 
 * The `INDEX` refers to the number shown next to the subscriber's name in the current list. It **must be a positive integer** (1, 2, 3, …).
 * At least one field must be provided.
@@ -332,28 +309,6 @@ Examples:
 **Expected output:** The output panel confirms the edit and shows the subscriber's updated details.
 
 ![Edit command result](../docs/images/Release1.3Edit.png)
-
----
-
-### Editing a box : `editbox`
-
-Edits the name or expiry date of an existing box belonging to a subscriber.
-
-Format: `editbox n/NAME b/BOX_NAME [nb/NEW_BOX_NAME] [ex/EXPIRY_DATE]`
-
-* The subscriber is identified by their exact `NAME`.
-* `b/BOX_NAME` identifies which box to edit.
-* At least one of `nb/` or `ex/` must be provided.
-* See also: [`addbox`](#adding-one-or-more-boxes-to-a-subscriber--addbox) to add new boxes, [`deletebox`](#deleting-boxes--deletebox) to remove boxes.
-
-Examples:
-* `editbox n/Sarah Tan b/box-1 nb/box-2` — renames the box.
-* `editbox n/Sarah Tan b/box-2 ex/2026-03-31` — extends the expiry date.
-* `editbox n/Wei Ming b/box-1 nb/box-3 ex/2026-02-28` — renames and updates expiry.
-
-**Expected output:** The output panel confirms the update and shows the box's new details.
-
-![Editbox command result](../docs/images/Release1.4-EditBox.png)
 
 ---
 
@@ -427,28 +382,6 @@ Examples:
 
 ---
 
-### Deleting boxes : `deletebox`
-
-Removes one or more boxes from a subscriber.
-
-Format: `deletebox n/NAME b/BOX_NAME [b/BOX_NAME]...`
-
-* The subscriber is identified by their exact `NAME`.
-* At least one box must be specified.
-* See also: [`addbox`](#adding-one-or-more-boxes-to-a-subscriber--addbox) to add boxes.
-
-> **Warning:** If you delete all boxes belonging to a subscriber, the subscriber will also be permanently deleted from Client2Door.
-
-Examples:
-* `deletebox n/Sarah Tan b/box-1` — removes one box from Sarah Tan.
-* `deletebox n/Wei Ming b/box-1 b/box-2` — removes two boxes. If these are Wei Ming's only boxes, Wei Ming will also be deleted.
-
-**Expected output:** The output panel confirms which boxes were removed.
-
-![Deletebox command result](../docs/images/Release1.4-DeleteBox.png)
-
----
-
 ### Marking delivery status : `mark`
 
 Updates the delivery status of a subscriber.
@@ -507,6 +440,73 @@ Before filtering by driver:
 After running `filter d/David Lim`, only that driver's subscribers are shown:
 
 ![Filter after (driver)](../docs/images/Release1.4-FilterAfterDriver.png)
+
+---
+
+### Adding one or more boxes to a subscriber : `addbox`
+
+Adds one or more boxes to an existing subscriber.
+
+Format: `addbox n/NAME b/BOX_NAME:NUMBER_OF_MONTHS [b/BOX_NAME:NUMBER_OF_MONTHS]...`
+
+* The subscriber is identified by their exact `NAME`.
+* The expiry date applies to all boxes added in the same command.
+* See also: [`add`](#adding-a-subscriber--add) to add boxes when first creating a subscriber.
+
+> **Tip:** Use this command when a subscriber renews or upgrades their order mid-cycle without changing their other details.
+
+Examples:
+
+Suppose the current date is `8 April 2026`,
+* `addbox n/Sarah Tan b/box-3:4` — adds one new box to Sarah Tan, expiring 4 months later, hence with an expiry date of 2026-08-31.
+* `addbox n/Wei Ming b/box-3:5 b/box-4:5` — adds two boxes to Wei Ming, both expiring 5 months later at 2026-09-30.
+
+**Expected output:** The output panel confirms the boxes have been added and shows the subscriber's updated details.
+
+---
+
+### Editing a box : `editbox`
+
+Edits the name or expiry date of an existing box belonging to a subscriber.
+
+Format: `editbox n/NAME b/BOX_NAME [nb/NEW_BOX_NAME] [ex/NUMBER_OF_MONTHS]`
+
+* The subscriber is identified by their exact `NAME`.
+* `b/BOX_NAME` identifies which box to edit.
+* At least one of `nb/` or `ex/` must be provided.
+* See also: [`addbox`](#adding-one-or-more-boxes-to-a-subscriber--addbox) to add new boxes, [`deletebox`](#deleting-boxes--deletebox) to remove boxes.
+
+Examples:
+* `editbox n/Sarah Tan b/box-1 nb/box-2` — renames the box.
+* `editbox n/Sarah Tan b/box-2 ex/3` — sets the expiry date to 3 months after the present date.
+* `editbox n/Wei Ming b/box-1 nb/box-3 ex/4` — renames box AND updates expiry to 4 months after the present date.
+> **Note:** Present date here refers to the present date in our time, not the previous expiry date before the edit.
+
+**Expected output:** The output panel confirms the update and shows the box's new details.
+
+![Editbox command result](../docs/images/Release1.4-EditBox.png)
+
+---
+
+### Deleting boxes : `deletebox`
+
+Removes one or more boxes from a subscriber.
+
+Format: `deletebox n/NAME b/BOX_NAME [b/BOX_NAME]...`
+
+* The subscriber is identified by their exact `NAME`.
+* At least one box must be specified.
+* See also: [`addbox`](#adding-one-or-more-boxes-to-a-subscriber--addbox) to add boxes.
+
+> **Warning:** If you delete all boxes belonging to a subscriber, the subscriber will also be permanently deleted from Client2Door.
+
+Examples:
+* `deletebox n/Sarah Tan b/box-1` — removes one box from Sarah Tan.
+* `deletebox n/Wei Ming b/box-1 b/box-2` — removes two boxes. If these are Wei Ming's only boxes, Wei Ming will also be deleted.
+
+**Expected output:** The output panel confirms which boxes were removed.
+
+![Deletebox command result](../docs/images/Release1.4-DeleteBox.png)
 
 ---
 
@@ -614,24 +614,24 @@ A: All previous driver assignments for every subscriber are replaced. The `assig
 
 ## Command summary
 
-| Action | Format | Example |
-|--------|--------|---------|
-| **Add** | `add n/NAME p/PHONE e/EMAIL a/ADDRESS b/BOX [o/REMARK] ex/EXPIRY_DATE [t/TAG]…` | `add n/Sarah Tan p/91234567 e/sarah@email.com a/Blk 10 AMK Ave 4 b/box-1 ex/2026-01-31` |
-| **Add Box** | `addbox n/NAME b/BOX [b/BOX]… ex/EXPIRY_DATE` | `addbox n/Sarah Tan b/box-3 ex/2026-03-31` |
-| **Edit** | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [o/REMARK] [ex/EXPIRY_DATE] [t/TAG]…` | `edit 2 p/98887777 o/prefers afternoon delivery` |
-| **Edit Box** | `editbox n/NAME b/BOX_NAME [nb/NEW_NAME] [ex/EXPIRY_DATE]` | `editbox n/Sarah Tan b/box-1 nb/box-2 ex/2026-02-28` |
-| **Delete** | `delete INDEX` or `delete EMAIL` | `delete 3` or `delete sarah@email.com` |
-| **Delete Box** | `deletebox n/NAME b/BOX [b/BOX]…` | `deletebox n/Sarah Tan b/box-1` |
-| **Find** | `find KEYWORD [MORE_KEYWORDS]` | `find Sarah Wei` |
-| **List** | `list` | `list` |
-| **Mark** | `mark INDEX STATUS` | `mark 1 delivered` |
-| **Filter** | `filter BOX_NAME` or `filter d/DRIVER_NAME` | `filter box-1` or `filter d/David Lim` |
-| **Remark** | `remark INDEX REMARK` | `remark 2 leave at door` |
-| **Assign** | `assign n/NAME p/PHONE [n/NAME p/PHONE]…` | `assign n/David Lim p/91234567 n/Priya Nair p/98765432` |
-| **Export** | `export [FILE_PATH]` | `export data/march-delivery.html` |
-| **Clear** | `clear` | `clear` |
-| **Help** | `help` | `help` |
-| **Exit** | `exit` | `exit` |
+| Action | Format                                                                                 | Example                                                                     |
+|--------|----------------------------------------------------------------------------------------|-----------------------------------------------------------------------------|
+| **Add** | `add n/NAME p/PHONE e/EMAIL a/ADDRESS b/BOX_NAME:NUMBER_OF_MONTHS [o/REMARK] [t/TAG]…` | `add n/Sarah Tan p/91234567 e/sarah@email.com a/Blk 10 AMK Ave 4 b/box-1:2` |
+| **Edit** | `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [o/REMARK] [t/TAG]…`              | `edit 2 p/98887777 o/prefers afternoon delivery`                            |
+| **Delete** | `delete INDEX` or `delete EMAIL`                                                       | `delete 3` or `delete sarah@email.com`                                      |
+| **Find** | `find KEYWORD [MORE_KEYWORDS]`                                                         | `find Sarah Wei`                                                            |
+| **List** | `list`                                                                                 | `list`                                                                      |
+| **Mark** | `mark INDEX STATUS`                                                                    | `mark 1 delivered`                                                          |
+| **Filter** | `filter BOX_NAME` or `filter d/DRIVER_NAME`                                            | `filter box-1` or `filter d/David Lim`                                      |
+| **Remark** | `remark INDEX REMARK`                                                                  | `remark 2 leave at door`                                                    |
+| **Add Box** | `addbox n/NAME b/BOX_NAME:NUMBER_OF_MONTHS [b/BOX_NAME:NUMBER_OF_MONTHS]…`             | `addbox n/Sarah Tan b/box-3:4`                                              |
+| **Edit Box** | `editbox n/NAME b/BOX_NAME [nb/NEW_NAME] [ex/NUMBER_OF_MONTHS]`                        | `editbox n/Sarah Tan b/box-1 nb/box-2 ex/3`                                 |
+| **Delete Box** | `deletebox n/NAME b/BOX_NAME [b/BOX_NAME]…`                                            | `deletebox n/Sarah Tan b/box-1`                                             |
+| **Assign** | `assign n/NAME p/PHONE [n/NAME p/PHONE]…`                                              | `assign n/David Lim p/91234567 n/Priya Nair p/98765432`                     |
+| **Export** | `export [FILE_PATH]`                                                                   | `export data/march-delivery.html`                                           |
+| **Clear** | `clear`                                                                                | `clear`                                                                     |
+| **Help** | `help`                                                                                 | `help`                                                                      |
+| **Exit** | `exit`                                                                                 | `exit`                                                                      |
 
 ---
 

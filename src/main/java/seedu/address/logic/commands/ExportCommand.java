@@ -94,6 +94,7 @@ public class ExportCommand extends Command {
      */
     private void getDriverMapping(Model model) throws NotExportableException {
         requireNonNull(model);
+        DeliveryAssignmentHashMap.clearAssignments();
         for (Person p : model.getAddressBook().getPersonList()) {
             if (!p.hasDriver()) {
                 throw new NotExportableException("Not all subscribers have been assigned a driver!");

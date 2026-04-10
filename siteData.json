@@ -150,6 +150,7 @@
     },
     {
       "src": "index.md",
+      "title": "",
       "headings": {
         "client2door": "Client2Door"
       },

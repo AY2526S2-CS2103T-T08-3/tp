@@ -91,6 +91,7 @@ Managing recurring orders in a spreadsheet gets messy fast — you lose track of
    - [Filtering subscribers — `filter`](#filtering-subscribers-filter)
    - [Assigning drivers — `assign`](#assigning-drivers-assign)
    - [Exporting assignments — `export`](#exporting-driver-delivery-assignments-export)
+   - [Importing subscribers — `import`](#importing-subscribers-import)
    - [Clearing all entries — `clear`](#clearing-all-entries-clear)
    - [Exiting — `exit`](#exiting-the-program-exit)
 4. [FAQ](#faq)
@@ -196,8 +197,9 @@ A subscriber is a customer who receives regular deliveries from your business. E
 1. A Name
 2. Phone number
 3. Email
-4. Delivery address 
-5. An optional remark (e.g. delivery preferences or notes).
+4. Delivery address
+5. At least one Box (subscription package)
+6. An optional remark (e.g. delivery preferences or notes).
 
 > **Note:** Addresses are validated by finding a 6-digit postal code, with the Singapore context kept in mind
 
@@ -258,7 +260,7 @@ Format: `add n/NAME p/PHONE e/EMAIL a/ADDRESS b/BOX_NAME:MONTHS_SUBSCRIBED [r/RE
 | Prefix | Parameter                          | Description                                                                                 |
 |--------|------------------------------------|---------------------------------------------------------------------------------------------|
 | `n/`   | `NAME`                             | Full name of the subscriber                                                                 |
-| `p/`   | `PHONE`                            | Contact number                                                                              |
+| `p/`   | `PHONE`                            | Contact number — digits only, at least 3 digits, must not start with 0                     |
 | `e/`   | `EMAIL`                            | Email address                                                                               |
 | `a/`   | `ADDRESS`                          | Delivery address                                                                            |
 | `b/`   | `BOX_NAME`<br/>`MONTHS_SUBSCRIBED` | Box name and number of months until subscription ends; At least 1 box subscription required |
@@ -372,6 +374,8 @@ Format: `delete INDEX`
 
 > **Warning:** Deletion is permanent and cannot be undone. Use [`find`](#finding-subscribers-find) to confirm you have the right subscriber before deleting. Consider running [`export`](#exporting-driver-delivery-assignments-export) before bulk deletions to save a copy of your data.
 
+> **Warning:** Deleting a subscriber clears all driver assignments for every subscriber. Re-run [`assign`](#assigning-drivers-assign) after deleting if driver assignments are needed.
+
 Examples:
 * `list` then `delete 2` — deletes the 2nd subscriber in the full list.
 * `find Sarah` then `delete 1` — deletes the first result from the search.
@@ -384,12 +388,18 @@ Examples:
 
 ### Marking delivery status : `mark`
 
-Updates the delivery status of a subscriber.
+Updates the delivery status of a subscriber. Delivery status tracks where a subscriber's order is in the fulfilment cycle:
+
+* `Pending` — order received but not yet prepared
+* `Packed` — boxes have been packed and are ready for dispatch
+* `Delivered` — order has been delivered to the subscriber
+
+Status does **not** reset automatically — it must be updated manually using this command.
 
 Format: `mark INDEX STATUS`
 
 * The `INDEX` refers to the number shown next to the subscriber in the current list. It **must be a positive integer** (1, 2, 3, …).
-* `STATUS` must be one of: `PENDING`, `PACKED`, or `DELIVERED` (not case-sensitive).
+* `STATUS` must be one of: `pending`, `packed`, or `delivered` (not case-sensitive).
 
 > **Tip:** Use `mark` as you progress through your fulfilment workflow — mark as `packed` once boxes are ready, then `delivered` after drop-off. This keeps your list up to date for driver coordination.
 
@@ -520,7 +530,8 @@ Format: `assign n/NAME p/PHONE [n/NAME p/PHONE]…`
 
 * Assigns drivers to **all subscribers** in Client2Door — the current view does not affect who gets assigned.
 * The number of `n/… p/…` pairs determines how many groups are created. Subscribers are divided roughly equally.
-* All driver phone numbers and names must be unique within the command (i.e., no two drivers have the same name or same phone number)
+* Driver phone numbers follow the same rules as subscriber phone numbers — digits only, at least 3 digits, must not start with 0.
+* All driver phone numbers and names must be unique within the command (i.e., no two drivers have the same name or same phone number).
 * Any existing driver assignment on a subscriber is replaced.
 * See also: [`export`](#exporting-driver-delivery-assignments-export) to generate a shareable delivery schedule after assigning.
 
@@ -539,13 +550,14 @@ Examples:
 
 Generates a shareable HTML file listing all drivers and their assigned subscribers.
 
-Format: `export [FILE_PATH]`
+Format: `export [FILE_NAME.html]`
 
 ![ExportedHTML.png](../docs/images/exportedHTML.png)
 
-* If `FILE_PATH` is omitted, the file is saved to `data/delivery_assignments.html` in your Client2Door folder.
-* If a file already exists at the specified path, it will be overwritten.
-* `FILE_PATH` must end with `.html`.
+* If `FILE_NAME.html` is omitted, the file is saved to `data/delivery_assignments.html` in your Client2Door folder.
+* Provide only the file name, not a path — all exports are saved to the `data/` folder automatically.
+* If a file with the same name already exists, it will be overwritten.
+* `FILE_NAME.html` must end with `.html`.
 * Requires at least one driver to have been assigned via [`assign`](#assigning-drivers-assign) first.
 
 > **Tip:** Open the exported `.html` file in any web browser to view a clean, printable summary. You can share it with your drivers directly.
@@ -554,7 +566,7 @@ Format: `export [FILE_PATH]`
 
 Examples:
 * `export` — saves to `data/delivery_assignments.html`.
-* `export data/march-delivery.html` — saves to a named file for a specific run.
+* `export march-delivery.html` — saves to `data/march-delivery.html`.
 
 **Expected output:** The output panel confirms the file has been saved and shows the file path.
 
@@ -574,6 +586,35 @@ Format: `import FILE_NAME.csv`
 * Invalid or duplicate rows are skipped and reported in the output panel.
 * Imported subscribers start with delivery status `Pending`.
 * Tags are not imported from the CSV file.
+
+> **Warning:** Running `import` clears all existing driver assignments. Re-run [`assign`](#assigning-drivers-assign) after importing if driver assignments are needed.
+
+**CSV format:**
+
+Each data row must have at least 9 columns in this order:
+
+| Column | Field | Notes |
+|--------|-------|-------|
+| 1 | Row index | Any value — not imported |
+| 2 | Name | |
+| 3 | Phone | |
+| 4 | Email | |
+| 5 | Address | Wrap in quotes if it contains commas |
+| 6 | Box 1 name | |
+| 7 | Box 1 months subscribed | Integer |
+| … | Additional box pairs | Repeat columns 6–7 for each extra box (leave blank to skip) |
+| 2nd to last | Remark | |
+| Last | Trailing column | Any value — not imported |
+
+Example row (one box):
+```
+0,Sarah Tan,91234567,sarah@email.com,Blk 10 Ang Mo Kio Ave 4,box-1,2,leave at door,extra
+```
+
+Example row (two boxes):
+```
+0,Wei Ming,98765432,wei@email.com,456 Jurong West Ave 1,box-1,3,box-2,6,no remark,extra
+```
 
 > **Tip:** Place the CSV file in the `data/` folder before running `import`. This command reads only from that folder.
 
@@ -657,7 +698,8 @@ A: All previous driver assignments for every subscriber are replaced. The `assig
 | **Edit Box** | `editbox n/NAME b/OLD_BOX_NAME [nb/NEW_BOX_NAME] [ex/MONTHS_SUBSCRIBED]`                | `editbox n/Sarah Tan b/box-1 nb/box-2 ex/3`                                 |
 | **Delete Box** | `deletebox n/NAME b/BOX_NAME [b/BOX_NAME]…`                                             | `deletebox n/Sarah Tan b/box-1`                                             |
 | **Assign** | `assign n/NAME p/PHONE [n/NAME p/PHONE]…`                                               | `assign n/David Lim p/91234567 n/Priya Nair p/98765432`                     |
-| **Export** | `export [FILE_PATH]`                                                                    | `export data/march-delivery.html`                                           |
+| **Export** | `export [FILE_NAME.html]`                                                               | `export march-delivery.html`                                                |
+| **Import** | `import FILE_NAME.csv`                                                                  | `import april-subscribers.csv`                                              |
 | **Clear** | `clear`                                                                                 | `clear`                                                                     |
 | **Help** | `help`                                                                                  | `help`                                                                      |
 | **Exit** | `exit`                                                                                  | `exit`                                                                      |

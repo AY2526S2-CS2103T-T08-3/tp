@@ -192,7 +192,7 @@ Tom Baker is removed. The output panel confirms the deletion. You are now ready 
 
 Before using Client2Door, it helps to understand three core ideas:
 
-**Subscriber**
+**Subscriber**:
 A subscriber is a customer who receives regular deliveries from your business. Each subscriber has:
 1. A Name
 2. Phone number
@@ -207,10 +207,14 @@ A subscriber is a customer who receives regular deliveries from your business. E
 > 
 > `Address` is validated by finding a 6-digit postal code, with the Singapore context kept in mind!
 
-**Box**
-A box represents a single recurring delivery package assigned to a subscriber. Each subscriber must have at least one box. Boxes have a name in the format `[type]-[number]` where the type uses underscores for multi-word names (e.g. `box-1`, `pastry-2`, `meal_kit-1`) and an expiry date — after which the subscription is considered lapsed. A subscriber can hold multiple boxes if they have ordered more than one package.
+**Box**:
+A box represents a single recurring delivery package assigned to a subscriber. Each subscriber must have at least one box. Boxes have a name in the format `[type]-[number]` where the type uses underscores for multi-word names (e.g. `box-1`, `pastry-2`, `meal_kit-1`) and an **expiry date** — after which the subscription is considered lapsed. A subscriber can hold multiple boxes if they have ordered more than one package.
 
-**Delivery Status**
+> **Note:**
+> 
+> Client2Door disallows adding boxes that expire in the same month they were added. This is because deliveries only start the month following the boxes' subscription at the earliest.
+
+**Delivery Status**:
 Every subscriber has a delivery status that reflects where their order is in the fulfilment process:
 - `Pending` — order received, not yet packed
 - `Packed` — box is packed and ready for dispatch
@@ -239,6 +243,18 @@ Every subscriber has a delivery status that reflects where their order is in the
 >
 > * If you are using a PDF version of this document, be careful when copying and pasting commands that span multiple lines as space characters surrounding line-breaks may be omitted when copied over to the application.
 
+### **Parameter reference:**
+
+| Prefix | Parameter                          | Description                                                                                 |
+|--------|------------------------------------|---------------------------------------------------------------------------------------------|
+| `n/`   | `NAME`                             | Full name of the subscriber                                                                 |
+| `p/`   | `PHONE`                            | Contact number — digits only, at least 3 digits, must not start with 0                     |
+| `e/`   | `EMAIL`                            | Email address                                                                               |
+| `a/`   | `ADDRESS`                          | Delivery address                                                                            |
+| `b/`   | `BOX_NAME`<br/>`MONTHS_SUBSCRIBED` | Box name and number of months until subscription ends; At least 1 box subscription required |
+| `r/`   | `REMARK`                           | Optional delivery note — defaults to `No remark` if omitted                                 |
+| `t/`   | `TAG`                              | Optional tag(s) — can be repeated                                                           |
+
 ---
 
 ### Viewing help : `help`
@@ -258,18 +274,6 @@ Format: `help`
 Adds a new subscriber to Client2Door.
 
 Format: `add n/NAME p/PHONE e/EMAIL a/ADDRESS b/BOX_NAME:MONTHS_SUBSCRIBED [r/REMARK] [t/TAG]…`
-
-**Parameter reference:**
-
-| Prefix | Parameter                          | Description                                                                                 |
-|--------|------------------------------------|---------------------------------------------------------------------------------------------|
-| `n/`   | `NAME`                             | Full name of the subscriber                                                                 |
-| `p/`   | `PHONE`                            | Contact number — digits only, at least 3 digits, must not start with 0                     |
-| `e/`   | `EMAIL`                            | Email address                                                                               |
-| `a/`   | `ADDRESS`                          | Delivery address                                                                            |
-| `b/`   | `BOX_NAME`<br/>`MONTHS_SUBSCRIBED` | Box name and number of months until subscription ends; At least 1 box subscription required |
-| `r/`   | `REMARK`                           | Optional delivery note — defaults to `No remark` if omitted                                 |
-| `t/`   | `TAG`                              | Optional tag(s) — can be repeated                                                           |
 
 > **Tip:** Add multiple boxes in one command by repeating `b/`. You can always add more boxes later with [`addbox`](#adding-one-or-more-boxes-to-a-subscriber-addbox).
 

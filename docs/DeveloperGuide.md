@@ -11,12 +11,6 @@
 
 --------------------------------------------------------------------------------------------------------------------
 
-## **Acknowledgements**
-
-_{ list here sources of all reused/adapted ideas, code, documentation, and third-party libraries -- include links to the original source as well }_
-
---------------------------------------------------------------------------------------------------------------------
-
 ## **Setting up, getting started**
 
 Refer to the guide [_Setting up and getting started_](SettingUp.md).
@@ -57,7 +51,7 @@ The *Sequence Diagram* below shows how the components interact with each other f
 Each of the four main components (also shown in the diagram above),
 
 * defines its *API* in an `interface` with the same name as the Component.
-* implements its functionality using a concrete `{Component Name}Manager` class (which follows the corresponding API `interface` mentioned in the previous point.
+* implements its functionality using a concrete `{Component Name}Manager` class which follows the corresponding API `interface` mentioned in the previous point.
 
 For example, the `Logic` component defines its API in the `Logic.java` interface and implements its functionality using the `LogicManager.java` class which follows the `Logic` interface. Other components interact with a given component through its interface rather than the concrete class (reason: to prevent outside component's being coupled to the implementation of a component), as illustrated in the (partial) class diagram below.
 
@@ -158,11 +152,11 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
-### Assign Drivers feature
+### Assign drivers feature
 
 #### Implementation Details
 
-The following sequence diagram shows how an undo operation goes through the Logic component:
+The following sequence diagram shows how an assign operation goes through the Logic component:
 
 <puml src="diagrams/AssignCommandSequence.puml" alt="AssignCommandSequence" />
 
@@ -170,7 +164,25 @@ Separate sequence diagram showing how the assignment of all subscribers:
 
 <puml src="diagrams/AssignLoopSequence.puml" alt="AssignLoopSequence" />
 
-The `AssignCommand` calls `ClusterUtil#groupIntoClusters()` to get the partitioned list of lists of `Person`s. It will then call `Model#setPerson()` to edit all the `Person`s in the address book.
+The following class diagram shows the structure of the clustering logic:
+
+<puml src="diagrams/AssignClassDiagram.puml" alt="AssignClassDiagram" />
+
+The `AssignCommand` calls `ClusterAssigner#groupIntoClusters()` to get the partitioned list of lists of `Person`s. It will then call `Model#setPerson()` to edit all the `Person`s in the address book. The clustering logic uses `GeographicalComparator`, `DistrictMapper` and `DistrictRanker` to sort subscribers geographically from west to east before partitioning.
+
+### Delete box feature
+
+#### Implementation Details
+
+The following sequence diagram shows how a `deleteBox` operation goes through the Logic component:
+
+<puml src="diagrams/DeleteBoxCommandSequence.puml" alt="DeleteBoxCommandSequence" />
+
+The following activity diagram summarizes what happens when a user executes a `deletebox` command:
+
+<puml src="diagrams/DeleteBoxActivityDiagram.puml" alt="DeleteBoxActivityDiagram" />
+
+A notable behaviour of `DeleteBoxCommand` is that if a subscriber has no remaining boxes after deletion, the subscriber is automatically deleted from the address book as well. Driver assignments are also cleared in this case.
 
 ### \[Proposed\] Undo/redo feature
 
@@ -263,13 +275,6 @@ The following activity diagram summarizes what happens when a user executes a ne
   * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
   * Cons: We must ensure that the implementation of each individual command are correct.
 
-_{more aspects and alternatives to be added}_
-
-### \[Proposed\] Data archiving
-
-_{Explain here how the data archiving feature will be implemented}_
-
-
 --------------------------------------------------------------------------------------------------------------------
 
 ## **Documentation, logging, testing, configuration, dev-ops**
@@ -291,7 +296,7 @@ _{Explain here how the data archiving feature will be implemented}_
 * small delivery startup owners (e.g., subscription box services) in Singapore
 * have limited manpower for admin work
 * have limited road experience and are unfamiliar with local addresses
-* can type fast and prefer typing over mouse interactions
+* can type fast and prefer typing to mouse interactions
 * are comfortable using CLI apps
 
 **Value proposition** (Client2Door):
@@ -536,21 +541,27 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 
 ### Glossary
 
+* **Box**: A subscription box associated with a subscriber, containing a box name and expiry date.
+
 * **CLI (Command Line Interface)**: A text-based interface where users interact with the system by typing commands instead of using graphical controls.
+
+* **Cluster**: A group of subscribers geographically grouped together and assigned to a single driver for efficient delivery.
+
+* **Delivery status**: The current state of a subscriber's delivery, which can be `PENDING`, `PACKED`, or `DELIVERED`.
+
+* **Driver**: A delivery driver assigned to a cluster of subscribers for a delivery session.
+
+* **Mainstream OS**: A widely used operating system such as Windows, macOS, or Linux.
+
+* **Postal code**: A 6-digit Singapore postal code prefixed with used to identify a subscriber's delivery address.
+
+* **Private contact detail**: Subscriber information that should only be accessible by the owner (e.g., phone numbers or addresses).
+
+* **Startup owner**: The primary user of the system, typically a small business owner managing customer subscriptions and deliveries.
 
 * **Subscriber**: A customer with an active subscription who is expected to receive  recurring deliveries.
 
 * **Subscription status**: The state indicating whether a customer currently has an active subscription.
-
-* **Delivery status**: The outcome of a delivery attempt (e.g., succeeded or failed).
-
-* **Startup owner**: The primary user of the system, typically a small business owner managing customer subscriptions and deliveries.
-
-* **Delivery driver**: A user responsible for carrying out deliveries using the information stored in the system.
-
-* **Mainstream OS**: A widely used operating system such as Windows, macOS, or Linux.
-
-* **Private contact detail**: Subscriber information that should only be accessible by the owner (e.g., phone numbers or addresses).
 
 --------------------------------------------------------------------------------------------------------------------
 

@@ -409,7 +409,7 @@ Format: `filter BOX_NAME [MORE_BOX_NAMES]…` OR `filter d/DRIVER_NAME [d/MORE_D
 
 * At least one of `BOX_NAME` or `d/DRIVER_NAME` must be provided.
 * `BOX_NAME` filters by the box type subscribers have (e.g. `box-1`).
-* `d/DRIVER_NAME` filters by the driver assigned to subscribers.
+* `d/DRIVER_NAME` filters by the driver assigned to subscribers. Subscribers are assigned to drivers using the [`assign`](#assigning-drivers-assign) command.
 * Subscribers matching **at least one** of the provided filters will be shown.
 * Run [`list`](#listing-all-subscribers-list) to return to the full subscriber view.
 

@@ -64,7 +64,11 @@
         "appendix-instructions-for-manual-testing": "Appendix: Instructions for manual testing",
         "launch-and-shutdown": "Launch and shutdown",
         "deleting-a-person": "Deleting a person",
-        "saving-data": "Saving data"
+        "adding-a-subscriber": "Adding a subscriber",
+        "assigning-drivers": "Assigning drivers",
+        "exporting-delivery-assignments": "Exporting delivery assignments",
+        "saving-data": "Saving data",
+        "example-format-of-the-data-file": "Example format of the data file"
       },
       "headingKeywords": {}
     },

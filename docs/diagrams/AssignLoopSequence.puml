@@ -21,14 +21,12 @@ group sd assign drivers to all subscribers
     ClusterAssigner --> AssignCommand : clusters of subscribers
     deactivate ClusterAssigner
 
-    loop for each cluster
-        loop for each subscriber in cluster
-            AssignCommand -> Model : setPerson(...)
-            activate Model
+    loop for each subscriber in each cluster
+        AssignCommand -> Model : setPerson(...)
+        activate Model
 
-            Model --> AssignCommand
-            deactivate Model
-        end
+        Model --> AssignCommand
+        deactivate Model
     end
 end
 

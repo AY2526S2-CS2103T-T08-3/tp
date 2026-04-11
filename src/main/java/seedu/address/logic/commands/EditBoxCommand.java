@@ -17,6 +17,7 @@ import java.util.TreeSet;
 import seedu.address.commons.util.CollectionUtil;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.logic.commands.util.CommandPersonUtil;
 import seedu.address.model.Model;
 import seedu.address.model.commons.name.Name;
 import seedu.address.model.commons.phone.Phone;
@@ -31,7 +32,7 @@ import seedu.address.model.person.Remark;
 import seedu.address.model.tag.Tag;
 
 /**
- * Edits the details of a box of an existing subscriber in the address book.
+ * Edits the details of one box belonging to an existing person in the address book.
  */
 public class EditBoxCommand extends Command {
 
@@ -63,9 +64,11 @@ public class EditBoxCommand extends Command {
     private final EditBoxDescriptor editBoxDescriptor;
 
     /**
-     * @param subscriberName of the subscriber in the filtered person list to edit
-     * @param boxName of the box of the subscriber specified
-     * @param editBoxDescriptor details of the new box to edit the subscriber's box with
+     * Creates an edit-box command for one box belonging to the specified person.
+     *
+     * @param subscriberName The name of the person whose box should be edited.
+     * @param boxName The current name of the box to edit.
+     * @param editBoxDescriptor The replacement details to apply to the box.
      */
     public EditBoxCommand(Name subscriberName, String boxName, EditBoxDescriptor editBoxDescriptor) {
         requireNonNull(subscriberName);
@@ -80,46 +83,39 @@ public class EditBoxCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        List<Person> lastShownList = model.getFilteredPersonList();
 
-        Person personToEdit = null;
-        for (Person person : lastShownList) {
-            if (person.getName().equals(this.subscriberName)) {
-                personToEdit = person;
-                break;
-            }
-        }
-
-        if (personToEdit == null) {
-            throw new CommandException(MESSAGE_PERSON_NOT_FOUND);
-        }
-
-        Box boxToEdit = null;
-        for (Box box : personToEdit.getBoxes()) {
-            if (box.boxName.equals(this.boxName)) {
-                boxToEdit = box;
-                break;
-            }
-        }
-        if (boxToEdit == null) {
-            throw new CommandException(MESSAGE_BOX_NOT_FOUND);
-        }
-
+        Person personToEdit = findSubscriber(model);
+        Box boxToEdit = findBox(personToEdit);
         Box editedBox = createEditedBox(boxToEdit, editBoxDescriptor);
         Person editedPerson = createEditedPerson(personToEdit, boxToEdit, editedBox);
 
-        if (!personToEdit.isSamePerson(editedPerson) && model.hasPerson(editedPerson)) {
-            throw new CommandException(MESSAGE_DUPLICATE_PERSON);
-        }
-
+        ensureNoDuplicatePerson(model, personToEdit, editedPerson);
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         return new CommandResult(String.format(MESSAGE_EDIT_BOX_SUCCESS, editedBox, subscriberName));
     }
 
+    private Person findSubscriber(Model model) throws CommandException {
+        List<Person> lastShownList = model.getFilteredPersonList();
+        return CommandPersonUtil.findPersonByName(lastShownList, subscriberName)
+                .orElseThrow(() -> new CommandException(MESSAGE_PERSON_NOT_FOUND));
+    }
+
+    private Box findBox(Person person) throws CommandException {
+        return person.getBoxes().stream()
+                .filter(box -> box.boxName.equals(boxName))
+                .findFirst()
+                .orElseThrow(() -> new CommandException(MESSAGE_BOX_NOT_FOUND));
+    }
+
+    private void ensureNoDuplicatePerson(Model model, Person original, Person edited) throws CommandException {
+        if (!original.isSamePerson(edited) && model.hasPerson(edited)) {
+            throw new CommandException(MESSAGE_DUPLICATE_PERSON);
+        }
+    }
+
     /**
-     * Creates and returns a {@code Box} with the details of {@code boxToEdit}
-     * edited with {@code editBoxDescriptor}
+     * Creates a box by applying the descriptor's edited fields to the original box.
      */
     private static Box createEditedBox(Box boxToEdit, EditBoxDescriptor editBoxDescriptor) {
         assert boxToEdit != null;
@@ -131,8 +127,7 @@ public class EditBoxCommand extends Command {
     }
 
     /**
-     * Creates and returns a {@code Person} with the details of {@code personToEdit} and the
-     * updated box {@code editedBox}
+     * Creates a person using the original person's details with one box replaced by the edited box.
      */
     private static Person createEditedPerson(Person personToEdit, Box boxToReplace, Box editedBox)
             throws CommandException {

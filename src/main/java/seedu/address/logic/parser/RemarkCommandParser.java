@@ -33,12 +33,19 @@ public class RemarkCommandParser implements Parser<RemarkCommand> {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, RemarkCommand.MESSAGE_USAGE), pe);
         }
 
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_REMARKS);
+
         if (!argMultimap.getValue(PREFIX_REMARKS).isPresent()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, RemarkCommand.MESSAGE_USAGE));
         }
 
         String remarkText = argMultimap.getValue(PREFIX_REMARKS).get().trim();
-        Remark remark = remarkText.isEmpty() ? new Remark() : new Remark(remarkText);
+        Remark remark;
+        try {
+            remark = remarkText.isEmpty() ? new Remark() : new Remark(remarkText);
+        } catch (IllegalArgumentException e) {
+            throw new ParseException(e.getMessage());
+        }
         return new RemarkCommand(index, remark);
     }
 }

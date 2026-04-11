@@ -1,6 +1,5 @@
 package seedu.address.logic.commands;
 
-import static java.util.Objects.isNull;
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_BOX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
@@ -9,11 +8,12 @@ import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import java.util.List;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.commands.exceptions.CommandException;
+import seedu.address.logic.commands.util.BoxUtil;
 import seedu.address.logic.commands.util.ClearDriversUtil;
+import seedu.address.logic.commands.util.CommandPersonUtil;
 import seedu.address.model.Model;
 import seedu.address.model.commons.name.Name;
 import seedu.address.model.person.Box;
@@ -50,9 +50,10 @@ public class DeleteBoxCommand extends Command {
     private final Set<String> targetBoxNames;
 
     /**
-     * Creates a DeleteBoxCommand for a given subscriber name and the names of boxes to delete
-     * @param targetName of the person to delete boxes from
-     * @param targetBoxNames of the boxes to delete
+     * Creates a delete-box command for the specified person name and box names.
+     *
+     * @param targetName The name of the person to delete boxes from.
+     * @param targetBoxNames The names of the boxes to delete.
      */
     public DeleteBoxCommand(Name targetName, Set<String> targetBoxNames) {
         requireNonNull(targetName);
@@ -64,59 +65,42 @@ public class DeleteBoxCommand extends Command {
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
-        List<Person> lastShownList = model.getFilteredPersonList();
-        Person personToEdit = getPersonByName(lastShownList, targetName);
 
-        if (isNull(personToEdit)) {
-            throw new CommandException(MESSAGE_PERSON_NOT_FOUND);
-        }
+        Person personToEdit = findSubscriber(model);
+        ensureAllBoxesExist(personToEdit);
 
-        if (!getNonExistentBoxNames(personToEdit, targetBoxNames).isEmpty()) {
-            throw new CommandException(String.format(MESSAGE_BOX_NOT_FOUND, personToEdit.getName(),
-                    getNonExistentBoxNames(personToEdit, targetBoxNames)));
-        }
+        Set<Box> updatedBoxes = BoxUtil.removeBoxes(personToEdit, targetBoxNames);
 
-        Set<Box> updatedBoxes = personToEdit.getBoxes().stream()
-                .filter(box -> !targetBoxNames.contains(box.boxName))
-                .collect(Collectors.toSet());
-
-        // if person has no more boxes upon deletion, the person gets deleted as well
         if (updatedBoxes.isEmpty()) {
-            model.deletePerson(personToEdit);
-            ClearDriversUtil.clearDriverAssignments(model);
-            model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
+            deletePersonAndClearDrivers(model, personToEdit);
             return new CommandResult(String.format(MESSAGE_DELETE_BOXES_AND_PERSON_SUCCESS, targetBoxNames,
                     personToEdit.getName()));
         }
 
-        Person editedPerson = new Person(
-                personToEdit.getName(), personToEdit.getPhone(), personToEdit.getEmail(), personToEdit.getAddress(),
-                updatedBoxes, personToEdit.getRemark(), personToEdit.getDeliveryStatus(), personToEdit.getTags(),
-                personToEdit.hasDriver() ? personToEdit.getAssignedDriver() : null
-        );
-
+        Person editedPerson = CommandPersonUtil.withBoxes(personToEdit, updatedBoxes);
         model.setPerson(personToEdit, editedPerson);
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         return new CommandResult(String.format(MESSAGE_DELETE_BOXES_SUCCESS, targetBoxNames, editedPerson.getName()));
     }
 
-    public Set<String> getNonExistentBoxNames(Person personToEdit, Set<String> targetBoxNames) {
-        Set<String> existingBoxNames = personToEdit.getBoxes().stream()
-                .map(box -> box.boxName)
-                .collect(Collectors.toSet());
-
-        return targetBoxNames.stream()
-                .filter(boxName -> !existingBoxNames.contains(boxName))
-                .collect(Collectors.toSet());
+    private Person findSubscriber(Model model) throws CommandException {
+        List<Person> lastShownList = model.getFilteredPersonList();
+        return CommandPersonUtil.findPersonByName(lastShownList, targetName)
+                .orElseThrow(() -> new CommandException(MESSAGE_PERSON_NOT_FOUND));
     }
 
-    public Person getPersonByName(List<Person> persons, Name name) {
-        for (Person person : persons) {
-            if (person.getName().equals(name)) {
-                return person;
-            }
+    private void ensureAllBoxesExist(Person personToEdit) throws CommandException {
+        Set<String> nonExistentBoxNames = BoxUtil.getNonExistentBoxNames(personToEdit, targetBoxNames);
+        if (!nonExistentBoxNames.isEmpty()) {
+            throw new CommandException(String.format(MESSAGE_BOX_NOT_FOUND, personToEdit.getName(),
+                    nonExistentBoxNames));
         }
-        return null;
+    }
+
+    private void deletePersonAndClearDrivers(Model model, Person personToEdit) {
+        model.deletePerson(personToEdit);
+        ClearDriversUtil.clearDriverAssignments(model);
+        model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
     }
 
     @Override

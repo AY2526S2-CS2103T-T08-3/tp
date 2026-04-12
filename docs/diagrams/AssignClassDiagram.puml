@@ -13,9 +13,9 @@ Class DistrictRanker #EE82EE
 Class Person MODEL_COLOR
 }
 
-AssignCommand ..> ClusterAssigner : uses
-ClusterAssigner ..> GeographicalComparator : uses
-GeographicalComparator ..> DistrictMapper : uses
-GeographicalComparator ..> DistrictRanker : uses
-ClusterAssigner ..> Person : groups
+AssignCommand ..> ClusterAssigner : <<use>>
+ClusterAssigner ..> GeographicalComparator : <<use>>
+GeographicalComparator ..> DistrictMapper : <<use>>
+GeographicalComparator ..> DistrictRanker : <<use>>
+ClusterAssigner ..> Person : <<group>>
 @enduml

@@ -22,10 +22,10 @@ endif
 
 :Remove specified boxes;
 
-if () then ([no remaining boxes])
+if () then ([subscriber has no remaining boxes])
     :Delete subscriber;
     :Clear driver assignments;
-else ([has remaining boxes])
+else ([subscriber has remaining box(es)])
     :Update subscriber with remaining boxes;
 endif
 

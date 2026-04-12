@@ -4,12 +4,16 @@ skinparam ActivityFontSize 15
 skinparam ArrowFontSize 12
 
 start
-:Validate file path;
 
-if () then ([invalid file name or type])
-    :Show error message;
-    stop
-else ([valid])
+if () then ([no file name provided])
+    :Use default file name;
+else ([file name provided])
+    :Validate file name;
+    if () then ([invalid file name or type])
+        :Show error message;
+        stop
+    else ([valid])
+    endif
 endif
 
 :Check all subscribers have assigned drivers;

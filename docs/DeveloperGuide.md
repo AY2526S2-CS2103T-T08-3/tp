@@ -338,6 +338,10 @@ Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unli
 | `* *`    | small business owner                       | edit a customer delivery entry                                                 | correct mistakes and handle last-minute changes                  |
 | `* *`    | small business owner                      | add remarks to a delivery (e.g. reason for failed delivery)                    | avoid repeating the same mistakes |
 | `* *`    | small business owner                       | import and export customers and order details                                  | avoid retyping existing data                                |
+| `* * *`  | small business owner                       | assign drivers to subscribers for a delivery run                               | distribute deliveries across my drivers efficiently         |
+| `* * *`  | small business owner                       | export driver delivery assignments to a shareable file                         | send each driver their delivery list without manual copying |
+| `* * *`  | small business owner                       | add, edit, and delete subscription boxes for a subscriber                      | keep each subscriber's order details accurate and up to date |
+| `* * *`  | small business owner                       | filter subscribers by box type or assigned driver                              | quickly review which subscribers belong to a specific group |
 | `* *`    | small business owner                       | group customers staying in the same block/estate/area                          | complete all deliveries in that area without revisiting |
 | `* *`    | small business owner who prefers commands over a graphical interface | generate a route grouped by location using a single command                    | minimize repeated trips easily |
 | `* *`    | small business owner                       | highlight blatantly erroneous entries                                          | reduce administrative workload (data checking)                    |

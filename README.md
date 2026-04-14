@@ -12,16 +12,13 @@ Client2Door is designed for keyboard-loving users in mind, maximising the benefi
 with a clean and easy-to-use **Graphical User Interface (GUI)**.
 
 ## Features
-- View the details of all your subscribers with ease
-- Easily add new subscribers and their orders over time
-- Search for specific subscribers
-- Filter subscribers based on various fields
-- Update and view delivery status for each subscriber
-- Group subscribers in location clusters to optimise delivery routes
-- Assign drivers to subscribers automatically
-- Export delivery assignments as a shareable HTML file
-- Import subscribers from a CSV file
-- Add delivery remarks and tags to subscribers
+- Add, edit, and delete subscribers with contact details, delivery address, and remarks
+- Manage subscription boxes per subscriber — add, edit, and delete boxes with expiry dates
+- Track delivery status for each subscriber (`Pending`, `Packed`, `Delivered`)
+- Search subscribers by name keyword, or filter by box type or assigned driver
+- Assign drivers to all subscribers in one command for efficient dispatch planning
+- Export driver delivery assignments to a shareable HTML file
+- Import subscribers in bulk from a CSV file
 
 ## Acknowledgements
 This project is a **part of the se-education.org** initiative. If you would like to contribute code to this project, see [se-education.org](https://se-education.org/#contributing-to-se-edu) for more info.

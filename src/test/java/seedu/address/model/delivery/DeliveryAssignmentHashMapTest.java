@@ -22,6 +22,8 @@ public class DeliveryAssignmentHashMapTest {
 
     private static final Driver DRIVER_A = new Driver(new Name("Alice Driver"), new Phone("91111111"));
     private static final Driver DRIVER_B = new Driver(new Name("Bob Driver"), new Phone("92222222"));
+    private static final Driver DRIVER_A_SAME_NAME = new Driver(new Name("Alice Driver"), new Phone("93333333"));
+    private static final Driver DRIVER_A_SAME_PHONE = new Driver(new Name("Charlie Driver"), new Phone("91111111"));
 
     @BeforeEach
     public void setUp() {
@@ -64,6 +66,34 @@ public class DeliveryAssignmentHashMapTest {
     }
 
     @Test
+    public void assign_sameDriverName_reusesExistingAssignmentList() {
+        DeliveryAssignmentHashMap map = DeliveryAssignmentHashMap.getInstance();
+        Person p1 = new PersonBuilder().withName("Alice Test").withEmail("alice@test.com").build();
+        Person p2 = new PersonBuilder().withName("Bob Test").withEmail("bob@test.com").build();
+
+        map.assign(DRIVER_A, p1);
+        map.assign(DRIVER_A_SAME_NAME, p2);
+
+        List<Person> list = map.getDeliveryListFor(DRIVER_A);
+        assertEquals(2, list.size());
+        assertEquals(1, map.getDriversKeySet().size());
+    }
+
+    @Test
+    public void assign_sameDriverPhone_reusesExistingAssignmentList() {
+        DeliveryAssignmentHashMap map = DeliveryAssignmentHashMap.getInstance();
+        Person p1 = new PersonBuilder().withName("Alice Test").withEmail("alice@test.com").build();
+        Person p2 = new PersonBuilder().withName("Bob Test").withEmail("bob@test.com").build();
+
+        map.assign(DRIVER_A, p1);
+        map.assign(DRIVER_A_SAME_PHONE, p2);
+
+        List<Person> list = map.getDeliveryListFor(DRIVER_A);
+        assertEquals(2, list.size());
+        assertEquals(1, map.getDriversKeySet().size());
+    }
+
+    @Test
     public void assign_duplicatePerson_notAddedTwice() {
         DeliveryAssignmentHashMap map = DeliveryAssignmentHashMap.getInstance();
         Person person = new PersonBuilder().build();
@@ -82,6 +112,26 @@ public class DeliveryAssignmentHashMapTest {
         map.assign(DRIVER_A, person);
 
         List<Person> list = map.getDeliveryListFor(DRIVER_A);
+        assertEquals(1, list.size());
+    }
+
+    @Test
+    public void getDeliveryListFor_sameDriverName_returnsList() {
+        DeliveryAssignmentHashMap map = DeliveryAssignmentHashMap.getInstance();
+        Person person = new PersonBuilder().build();
+        map.assign(DRIVER_A, person);
+
+        List<Person> list = map.getDeliveryListFor(DRIVER_A_SAME_NAME);
+        assertEquals(1, list.size());
+    }
+
+    @Test
+    public void getDeliveryListFor_sameDriverPhone_returnsList() {
+        DeliveryAssignmentHashMap map = DeliveryAssignmentHashMap.getInstance();
+        Person person = new PersonBuilder().build();
+        map.assign(DRIVER_A, person);
+
+        List<Person> list = map.getDeliveryListFor(DRIVER_A_SAME_PHONE);
         assertEquals(1, list.size());
     }
 
